@@ -68,6 +68,12 @@
                         <p>Blocks</p>
                     </a>
                 </li>
+								<li>
+                    <a href="pyaments.html">
+                        <i class="ti-wallet"></i>
+                        <p>Payments</p>
+                    </a>
+                </li>
                 <li>
                     <a href="connect.html">
                         <i class="ti-direction"></i>
@@ -75,12 +81,6 @@
                     </a>
                 </li>
                 <!--<li>
-                    <a href="icons.html">
-                        <i class="ti-pencil-alt2"></i>
-                        <p>Icons</p>
-                    </a>
-                </li>
-                <li>
                     <a href="maps.html">
                         <i class="ti-map"></i>
                         <p>Maps</p>
@@ -145,7 +145,7 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-									<div class="col-lg-3 col-sm-4">
+									<div class="col-lg-4 col-sm-4">
 											<div class="card">
 													<div class="content">
 															<div class="row">
@@ -170,7 +170,7 @@
 													</div>
 											</div>
 									</div>
-							<div class="col-lg-3 col-sm-4">
+							<div class="col-lg-4 col-sm-4">
                         <div class="card">
                             <div class="content">
                                 <div class="row">
@@ -195,7 +195,7 @@
                             </div>
                         </div>
                     </div>
-										<div class="col-lg-3 col-sm-4">
+										<div class="col-lg-4 col-sm-4">
 			                        <div class="card">
 			                            <div class="content">
 			                                <div class="row">
@@ -220,7 +220,7 @@
 			                            </div>
 			                        </div>
 			                    </div>
-                    <div class="col-lg-3 col-sm-4">
+											<div class="col-lg-6 col-sm-6">
                         <div class="card">
                             <div class="content">
                                 <div class="row">
@@ -231,21 +231,21 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Pool (H/s)</p>
-                                            <div id="poolHashRate">0</div>
+                                            <p>Pool Hash Rate</p>
+                                            <div id="poolHashRate">0 H/s</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="footer">
                                     <hr />
                                     <div class="stats">
-                                        <i class="ti-timer"></i> Last 10 seconds
+                                        <i class="ti-reload"></i> Last 10 seconds
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-										<div class="col-lg-3 col-sm-4">
+										<div class="col-lg-6 col-sm-6">
                         <div class="card">
                             <div class="content">
                                 <div class="row">
@@ -256,45 +256,45 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Network (H/s)</p>
-                                            <div id="networkHashRate">0</div>
+                                            <p>Network Hash Rate</p>
+                                            <div id="networkHashRate">0 H/s</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="footer">
                                     <hr />
                                     <div class="stats">
-                                        <i class="ti-timer"></i> Last 10 seconds
+                                        <i class="ti-reload"></i> Last 10 seconds
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-										<div class="col-lg-3 col-sm-4">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-warning text-center">
-                                            <i class="ti-hummer"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-7">
-                                        <div class="numbers">
-                                            <p>Difficulty</p>
-                                            <div id="networkDifficulty">0</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="footer">
-                                    <hr />
-                                    <div class="stats">
-                                        <i class="ti-timer"></i> Last 10 seconds
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+										<div class="col-lg-6 col-sm-6">
+												<div class="card">
+														<div class="content">
+																<div class="row">
+																		<div class="col-xs-5">
+																				<div class="icon-big icon-warning text-center">
+																						<i class="ti-hummer"></i>
+																				</div>
+																		</div>
+																		<div class="col-xs-7">
+																				<div class="numbers">
+																						<p>Network Difficulty</p>
+																						<div id="networkDifficulty">0</div>
+																				</div>
+																		</div>
+																</div>
+																<div class="footer">
+																		<hr />
+																		<div class="stats">
+																				<i class="ti-reload"></i> Last 10 seconds
+																		</div>
+																</div>
+														</div>
+												</div>
+										</div>
 									</div>
                 <div class="row">
 
@@ -302,15 +302,14 @@
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Hash Rate</h4>
-                                <p class="category">24 hours performance</p>
+                                <p class="category">Last 24 hours</p>
                             </div>
                             <div class="content">
                                 <div id="chartHours" class="ct-chart"></div>
                                 <div class="footer">
                                     <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i> Pool
-                                        <i class="fa fa-circle text-danger"></i> Network
-                                        <!--<i class="fa fa-circle text-warning"></i> Click Second Time-->
+																				<i class="fa fa-circle text-info"></i> Network
+                                        <i class="fa fa-circle text-warning"></i> Pool
                                     </div>
                                     <hr>
                                     <div class="stats">
@@ -321,44 +320,22 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="row">
+                <div class="row">
                     <div class="col-md-6">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Email Statistics</h4>
-                                <p class="category">Last Campaign Performance</p>
+                                <h4 class="title">Luck</h4>
+                                <p class="category">Last 10 blocks</p>
                             </div>
                             <div class="content">
-                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-
-                                <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Bounce
-                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-timer"></i> Campaign sent 2 days ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title">Connected miners</h4>
-                                <p class="category">24 hours performance</p>
-                            </div>
-                            <div class="content">
-                                <div id="chartActivity" class="ct-chart"></div>
+                                <!--<div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>-->
 
                                 <div class="footer">
                                     <!--<div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i> Tesla Model S
-                                        <i class="fa fa-circle text-warning"></i> BMW 5 Series
-                                    </div>
+                                        <i class="fa fa-circle text-info"></i> Open
+                                        <i class="fa fa-circle text-danger"></i> Bounce
+                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
+                                    </div>-->
                                     <hr>
                                     <div class="stats">
                                         <i class="ti-reload"></i> Update every hour
@@ -367,7 +344,29 @@
                             </div>
                         </div>
                     </div>
-                </div>-->
+                    <div class="col-md-6">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title">Miners</h4>
+                                <p class="category">Last 24 hours</p>
+                            </div>
+                            <div class="content">
+                                <div id="chartActivity" class="ct-chart"></div>
+
+                                <div class="footer">
+                                    <!--<div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i> Tesla Model S
+                                        <i class="fa fa-circle text-warning"></i> BMW 5 Series
+                                    </div>-->
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-reload"></i> Update every hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -383,13 +382,13 @@
                         </li>-->
                         <li>
                             <a href="http://www.creative-tim.com/license">
-                                Licenses
+                                Theme Licenses
                             </a>
                         </li>
                     </ul>
                 </nav>
                 <div class="copyright pull-right">
-                    &copy; <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative Tim</a>
+                    &copy; <script>document.write(new Date().getFullYear())</script>, theme made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative Tim</a>
                 </div>
             </div>
         </footer>
