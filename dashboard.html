@@ -131,7 +131,6 @@
                                id="currentPool">
                                 <i class="ti-money"></i>
                                 <p></p>
-                                <b class="caret"></b>
                             </a>
                         </li>
                         <li>
@@ -442,29 +441,45 @@ But that's the difference in our opinions.</textarea>
     $(document).ready(function () {
         loadPools()
             .done(function () {
-                $('#walletAddress').on('change', function (event) {
+                function render() {
                     clearInterval();
-                    walletAddress = $(event.target).val();
+                    walletAddress = $('#walletAddress').val();
                     setInterval(function load() {
                         loadDashboardData(walletAddress);
                         loadDashboardWorkerList(walletAddress);
                         loadDashboardChart(walletAddress)
                         return load;
                     }(), 60000);
+                }
+
+                $('#walletAddress').on('change', function (event) {
+                    render();
+                });
+                $('#poolList li a').on('click', function (event) {
+                    currentPool = $(event.target).attr('data-id');
+                    render();
                 });
             })
             .fail(alert('API dead'))
             //always() for debug
             .always(function () {
-                $('#walletAddress').on('change', function (event) {
+                function render() {
                     clearInterval();
-                    walletAddress = $(event.target).val();
+                    walletAddress = $('#walletAddress').val();
                     setInterval(function load() {
                         loadDashboardData(walletAddress);
                         loadDashboardWorkerList(walletAddress);
                         loadDashboardChart(walletAddress)
                         return load;
                     }(), 60000);
+                }
+
+                $('#walletAddress').on('change', function (event) {
+                    render();
+                });
+                $('#poolList li a').on('click', function (event) {
+                    currentPool = $(event.target).attr('data-id');
+                    render();
                 });
             });
     });

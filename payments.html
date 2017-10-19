@@ -133,7 +133,6 @@
                                id="currentPool">
                                 <i class="ti-money"></i>
                                 <p></p>
-                                <b class="caret"></b>
                             </a>
                         </li>
                         <li>
@@ -290,10 +289,22 @@
 <script type="text/javascript">
     $(document).ready(function () {
         loadPools()
-            .done(loadPaymentsList)
+            .done(function () {
+                $('#poolList li a').on('click', function (event) {
+                    currentPool = $(event.target).attr('data-id');
+                    loadPaymentsList();
+                });
+                loadPaymentsList();
+            })
             .fail(alert('API dead'))
             //always() for debug
-            .always(loadPaymentsList);
+            .always(function () {
+                $('#poolList li a').on('click', function (event) {
+                    currentPool = $(event.target).attr('data-id');
+                    loadPaymentsList();
+                });
+                loadPaymentsList();
+            });
     });
 </script>
 

@@ -1486,7 +1486,7 @@ textarea.form-control {
   .card .content {
     padding: 15px 15px 10px 15px; }
   .card .header {
-    padding: 20px 20px 0; }
+    padding: 15px 15px 0; }
   .card .description {
     font-size: 16px;
     color: #66615b; }
@@ -2256,7 +2256,7 @@ textarea.form-control {
     top: -11px; }
 
   .navbar-nav > li > .dropdown-menu:after {
-    border-bottom: 11px solid #FFFCF5;
+    border-bottom: 10px solid #FFFCF5;
     border-left: 11px solid transparent;
     border-right: 11px solid transparent;
     content: "";
