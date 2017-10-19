@@ -289,11 +289,11 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-      loadPools()
-        .done(loadBlocksList)
-        .fail(alert('API dead'))
-        //always() for debug
-        .always(loadBlocksList);
+        loadPools()
+            .done(loadBlocksList)
+            .fail(alert('API dead'))
+            //always() for debug
+            .always(loadBlocksList);
     });
 </script>
 

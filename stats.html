@@ -431,30 +431,30 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-      loadPools()
-        .done(function (){
-          setInterval(function load() {
-            loadStatsData();
-            return load;
-          }(), 10000);
-          setInterval(function load() {
-            loadStatsChart();
-            return load;
-          }(), 600000);
-        })
-        .fail(alert('API dead'))
-        //always() for debug
-        .always(function (){
-          setInterval(function load() {
-            loadStatsData();
-            return load;
-          }(), 10000);
-          setInterval(function load() {
-            loadStatsChart();
-            return load;
-          }(), 600000);
-        });
-  });
+        loadPools()
+            .done(function () {
+                setInterval(function load() {
+                    loadStatsData();
+                    return load;
+                }(), 10000);
+                setInterval(function load() {
+                    loadStatsChart();
+                    return load;
+                }(), 600000);
+            })
+            .fail(alert('API dead'))
+            //always() for debug
+            .always(function () {
+                setInterval(function load() {
+                    loadStatsData();
+                    return load;
+                }(), 10000);
+                setInterval(function load() {
+                    loadStatsChart();
+                    return load;
+                }(), 600000);
+            });
+    });
 </script>
 
 <!-- Paper Dashboard DEMO methods, don't include it in your project! -->

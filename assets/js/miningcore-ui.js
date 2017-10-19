@@ -147,15 +147,15 @@ function loadStatsChart() {
 };
 
 function loadDashboardData(walletAddress, workerName) {
-  $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
-      .always(function (data) {//debug,should be done()
-          data = JSON.parse('{"pendingShares":354,"pendingBalance":1.456,"totalPaid":12.354}');//debug
-          //.done(function( data )) {
-          //data = JSON.parse(data);
-          $('#unconfirmedBalance').text(data.pendingBalance);
-          $('#unconfirmedShares').text(data.pendingShares);
-          $('#totalPaid').text(data.totalPaid);
-      });
+    $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
+        .always(function (data) {//debug,should be done()
+            data = JSON.parse('{"pendingShares":354,"pendingBalance":1.456,"totalPaid":12.354}');//debug
+            //.done(function( data )) {
+            //data = JSON.parse(data);
+            $('#unconfirmedBalance').text(data.pendingBalance);
+            $('#unconfirmedShares').text(data.pendingShares);
+            $('#totalPaid').text(data.totalPaid);
+        });
 }
 
 function loadDashboardWorkerList(walletAddress, workerName) {
@@ -163,67 +163,67 @@ function loadDashboardWorkerList(walletAddress, workerName) {
 }
 
 function loadDashboardChart(walletAddress, workerName) {
-  $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
-      .always(function (data) {//debug,should be done()
-        data = JSON.parse('{"stats":[{"poolHashRate":20,"connectedMiners":12,"created":"2017-09-16T10:00:00"},{"poolHashRate":25,"connectedMiners":15,"created":"2017-09-16T11:00:00"},{"poolHashRate":23,"connectedMiners":13,"created":"2017-09-17T10:00:00"}]}');//debug
-        //.done(function( data )) {
-        //data = JSON.parse(data);
+    $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
+        .always(function (data) {//debug,should be done()
+            data = JSON.parse('{"stats":[{"poolHashRate":20,"connectedMiners":12,"created":"2017-09-16T10:00:00"},{"poolHashRate":25,"connectedMiners":15,"created":"2017-09-16T11:00:00"},{"poolHashRate":23,"connectedMiners":13,"created":"2017-09-17T10:00:00"}]}');//debug
+            //.done(function( data )) {
+            //data = JSON.parse(data);
 
-        labels = [];
-        poolHashRate = [];
-        youHashRate = [];
-        maxHashRate = 0;
+            labels = [];
+            poolHashRate = [];
+            youHashRate = [];
+            maxHashRate = 0;
 
-        $.each(data.stats, function (index, value) {
-            labels.push(new Date(value.created).toLocaleTimeString());
-            poolHashRate.push(value.poolHashRate);
-            youHashRate.push(5);//debug
-            if (value.poolHashRate > maxHashRate) {
-                maxHashRate = value.poolHashRate;
-            }
-            /*
-            if (value.youHashRate > maxHashRate) {
-              maxHashRate = value.youHashRate;
-            }
-            */
-        });
-
-        var data = {
-            labels: labels,
-            series: [
-                poolHashRate,
-                youHashRate
-            ]
-        };
-
-        var options = {
-            lineSmooth: false,
-            low: 0,
-            high: maxHashRate * 1.1,
-            showArea: true,
-            height: "245px",
-            axisX: {
-                showGrid: false,
-            },
-            lineSmooth: Chartist.Interpolation.simple({
-                divisor: 2
-            }),
-            showLine: true,
-            showPoint: false,
-        };
-
-        var responsiveOptions = [
-            ['screen and (max-width: 640px)', {
-                axisX: {
-                    labelInterpolationFnc: function (value) {
-                        return value[0];
-                    }
+            $.each(data.stats, function (index, value) {
+                labels.push(new Date(value.created).toLocaleTimeString());
+                poolHashRate.push(value.poolHashRate);
+                youHashRate.push(5);//debug
+                if (value.poolHashRate > maxHashRate) {
+                    maxHashRate = value.poolHashRate;
                 }
-            }]
-        ];
+                /*
+                if (value.youHashRate > maxHashRate) {
+                  maxHashRate = value.youHashRate;
+                }
+                */
+            });
 
-        Chartist.Line('#chartDashboardHashRate', data, options, responsiveOptions);
-      });
+            var data = {
+                labels: labels,
+                series: [
+                    poolHashRate,
+                    youHashRate
+                ]
+            };
+
+            var options = {
+                lineSmooth: false,
+                low: 0,
+                high: maxHashRate * 1.1,
+                showArea: true,
+                height: "245px",
+                axisX: {
+                    showGrid: false,
+                },
+                lineSmooth: Chartist.Interpolation.simple({
+                    divisor: 2
+                }),
+                showLine: true,
+                showPoint: false,
+            };
+
+            var responsiveOptions = [
+                ['screen and (max-width: 640px)', {
+                    axisX: {
+                        labelInterpolationFnc: function (value) {
+                            return value[0];
+                        }
+                    }
+                }]
+            ];
+
+            Chartist.Line('#chartDashboardHashRate', data, options, responsiveOptions);
+        });
 }
 
 function loadBlocksList() {
@@ -261,7 +261,7 @@ function loadPaymentsList() {
                 $.each(data, function (index, value) {
                     paymentList += '<tr>';
                     paymentList += '<td>' + new Date(value.created).toLocaleString() + '</td>';
-                    paymentList += '<td>' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 10)+ '</td>';
+                    paymentList += '<td>' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 10) + '</td>';
                     paymentList += '<td>' + value.amount + '</td>';
                     paymentList += '<td><a href="' + value.infoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 16) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 16) + ' </a></td>';
                     paymentList += '</tr>'
