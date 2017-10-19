@@ -289,7 +289,11 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        loadPaymentList();
+			loadPools()
+				.done(loadPaymentsList)
+				.fail(alert('API dead'))
+        //always() for debug
+        .always(loadPaymentsList);
     });
 </script>
 

@@ -1606,8 +1606,8 @@ textarea.form-control {
   line-height: 24px; }
 .card-user .description {
   margin-top: 10px; }
-.card-user .content {
-  min-height: 200px; }
+/*.card-user .content {
+  min-height: 200px; }*/
 .card-user.card-plain .avatar {
   height: 190px;
   width: 190px; }

@@ -312,7 +312,7 @@
                                 <p class="category">Last 24 hours</p>
                             </div>
                             <div class="content">
-                                <div id="chartHours" class="ct-chart"></div>
+                                <div id="chartStatsHashRate" class="ct-chart"></div>
                                 <div class="footer">
                                     <div class="chart-legend">
                                         <i class="fa fa-circle text-info"></i> Network
@@ -335,7 +335,7 @@
                                 <p class="category">Last 10 blocks</p>
                             </div>
                             <div class="content">
-                                <!--<div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>-->
+                                <!--<div id="chartStatsLuck" class="ct-chart ct-perfect-fourth"></div>-->
 
                                 <div class="footer">
                                     <!--<div class="chart-legend">
@@ -358,7 +358,7 @@
                                 <p class="category">Last 24 hours</p>
                             </div>
                             <div class="content">
-                                <div id="chartActivity" class="ct-chart"></div>
+                                <div id="chartStatsMiners" class="ct-chart"></div>
 
                                 <div class="footer">
                                     <!--<div class="chart-legend">
@@ -431,9 +431,30 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        setInterval(loadPoolStats(), 10000);
-        setInterval(loadChart(), 600000);
-    });
+      loadPools()
+        .done(function (){
+          setInterval(function load() {
+            loadStatsData();
+            return load;
+          }(), 10000);
+          setInterval(function load() {
+            loadStatsChart();
+            return load;
+          }(), 600000);
+        })
+        .fail(alert('API dead'))
+        //always() for debug
+        .always(function (){
+          setInterval(function load() {
+            loadStatsData();
+            return load;
+          }(), 10000);
+          setInterval(function load() {
+            loadStatsChart();
+            return load;
+          }(), 600000);
+        });
+  });
 </script>
 
 <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
