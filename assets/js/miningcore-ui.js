@@ -13,10 +13,9 @@ function loadPools() {
             data = JSON.parse('{"pools":[{"id":"xmr1","coin":{"type":"XMR"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"donationsPercent":0,"poolStats":{"connectedMiners":0,"poolHashRate":0,"sharesPerSecond":0,"validSharesPerMinute":0,"invalidSharesPerMinute":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}},{"id":"etc1","coin":{"type":"ETC"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"donationsPercent":0,"poolStats":{"connectedMiners":0,"poolHashRate":0,"sharesPerSecond":0,"validSharesPerMinute":0,"invalidSharesPerMinute":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}}]}');//debug
             //.done(function( data )) {
             //data = JSON.parse(data);
-            var poolList = '';
+            var poolList = '<ul class="dropdown-menu">';
             if (data.pools.length > 1) {
                 $('#currentPool').append('<b class="caret"></b>');
-                poolList += '<ul class="dropdown-menu">';
             }
             $.each(data.pools, function (index, value) {
                 if (currentPool.length == 0 && index == 0) {
@@ -29,9 +28,7 @@ function loadPools() {
                     poolList += '<li><a href="javascript:void(0)" data-id="' + value.id + '">' + value.coin.type + '</a></li>';
                 }
             });
-            if (data.pools.length > 1) {
-                poolList += '</ul>';
-            }
+            poolList += '</ul>';
             if (poolList.length > 0) {
                 $('#poolList').append(poolList);
             }
@@ -39,7 +36,7 @@ function loadPools() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API. (loadPools)"
+                message: "Error: No response from API.<br>(loadPools)"
             }, {
                 type: 'danger',
                 timer: 3000
@@ -74,7 +71,7 @@ function loadStatsData() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API. (loadStatsData)"
+                message: "Error: No response from API.<br>(loadStatsData)"
             }, {
                 type: 'danger',
                 timer: 3000
@@ -178,7 +175,7 @@ function loadStatsChart() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API. (loadStatsChart)"
+                message: "Error: No response from API.<br>(loadStatsChart)"
             }, {
                 type: 'danger',
                 timer: 3000
@@ -187,7 +184,7 @@ function loadStatsChart() {
 
 };
 
-function loadDashboardData(walletAddress, workerName) {
+function loadDashboardData(walletAddress) {
     return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
         .always(function (data) {//debug,should be done()
             data = JSON.parse('{"pendingShares":354,"pendingBalance":1.456,"totalPaid":12.354}');//debug
@@ -201,7 +198,7 @@ function loadDashboardData(walletAddress, workerName) {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API. (loadDashboardData)"
+                message: "Error: No response from API.<br>(loadDashboardData)"
             }, {
                 type: 'danger',
                 timer: 3000
@@ -209,11 +206,38 @@ function loadDashboardData(walletAddress, workerName) {
         });
 }
 
-function loadDashboardWorkerList(walletAddress, workerName) {
-
+function loadDashboardWorkerList(walletAddress) {
+    return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
+        .always(function (data) {//debug,should be done()
+            data = JSON.parse('{"stats":[{"poolHashRate":20,"connectedMiners":12,"created":"2017-09-16T10:00:00"},{"poolHashRate":25,"connectedMiners":15,"created":"2017-09-16T11:00:00"},{"poolHashRate":23,"connectedMiners":13,"created":"2017-09-17T10:00:00"}]}');//debug
+            //.done(function( data )) {
+            //data = JSON.parse(data);
+            var workerList = '<thead><th>Name</th><th>Hash Rate</th></thead><tbody>';
+            if (data.length > 0) {
+                $.each(data, function (index, value) {
+                    workerList += '<tr>';
+                    //workerList += '<td>' + value.blockHeight + '</td>';
+                    //workerList += '<td>' + value.status + '</td>';
+                    workerList += '</tr>'
+                });
+            } else {
+                workerList += '<tr><td colspan="4">None</td></tr>';
+            }
+            workerList += '</tbody>';
+            $('#workerList').html(workerList);
+        })
+        .fail(function () {
+            $.notify({
+                icon: "ti-cloud-down",
+                message: "Error: No response from API.<br>(loadDashboardWorkerList)"
+            }, {
+                type: 'danger',
+                timer: 3000
+            });
+        });
 }
 
-function loadDashboardChart(walletAddress, workerName) {
+function loadDashboardChart(walletAddress) {
     return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
         .always(function (data) {//debug,should be done()
             data = JSON.parse('{"stats":[{"poolHashRate":20,"connectedMiners":12,"created":"2017-09-16T10:00:00"},{"poolHashRate":25,"connectedMiners":15,"created":"2017-09-16T11:00:00"},{"poolHashRate":23,"connectedMiners":13,"created":"2017-09-17T10:00:00"}]}');//debug
@@ -278,7 +302,7 @@ function loadDashboardChart(walletAddress, workerName) {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API. (loadDashboardChart)"
+                message: "Error: No response from API.<br>(loadDashboardChart)"
             }, {
                 type: 'danger',
                 timer: 3000
@@ -311,7 +335,7 @@ function loadBlocksList() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API. (loadBlocksList)"
+                message: "Error: No response from API.<br>(loadBlocksList)"
             }, {
                 type: 'danger',
                 timer: 3000
@@ -344,7 +368,7 @@ function loadPaymentsList() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API. (loadPaymentsList)"
+                message: "Error: No response from API.<br>(loadPaymentsList)"
             }, {
                 type: 'danger',
                 timer: 3000

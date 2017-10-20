@@ -106,8 +106,7 @@
                                 </a>
                         </li>-->
                         <li class="dropdown" id="poolList">
-                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown"
-                               id="currentPool">
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" id="currentPool">
                                 <i class="ti-money"></i>
                                 <p></p>
                             </a>
@@ -126,7 +125,7 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-4 col-sm-4">
                         <div class="card card-user">
                             <div class="image">
                                 <img src="assets/img/background.jpg" alt="..."/>
@@ -151,31 +150,18 @@
                         </div>
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Workers</h4>
+                                <h4 class="title">Online Workers</h4>
                             </div>
                             <div class="content">
-                                <ul id="workerList" class="list-unstyled team-members">
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-xs-3">
-                                                <div class="avatar">
-                                                    <img src="assets/img/faces/face-0.jpg" alt="Circle Image"
-                                                         class="img-circle img-no-padding img-responsive">
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                worker1
-                                                <br/>
-                                                <span class="text-muted"><small>Offline</small></span>
-                                            </div>
-
-                                            <div class="col-xs-3 text-right">
-                                                <btn class="btn btn-sm btn-success btn-icon"><i
-                                                        class="fa fa-envelope"></i></btn>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <table id="poolConfig" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Hash Rate</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -183,15 +169,15 @@
                         <div class="card">
                             <div class="content">
                                 <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-success text-center">
+                                    <div class="col-xs-2">
+                                        <div class="icon-big icon-success">
                                             <i class="ti-receipt"></i>
                                         </div>
                                     </div>
-                                    <div class="col-xs-7">
+                                    <div class="col-xs-10">
                                         <div class="numbers">
-                                            <p>Unconfirmed Shares</p>
-                                            <div id="unconfirmedShares"></div>
+                                            <p>Pending Shares</p>
+                                            <div id="pendingShares"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -208,12 +194,12 @@
                         <div class="card">
                             <div class="content">
                                 <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-info text-center">
+                                    <div class="col-xs-2">
+                                        <div class="icon-big icon-info">
                                             <i class="ti-pulse"></i>
                                         </div>
                                     </div>
-                                    <div class="col-xs-7">
+                                    <div class="col-xs-10">
                                         <div class="numbers">
                                             <p>Miner's Hash Rate</p>
                                             <div id="minerHashRate"></div>
@@ -233,15 +219,15 @@
                         <div class="card">
                             <div class="content">
                                 <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-success text-center">
+                                    <div class="col-xs-2">
+                                        <div class="icon-big icon-success">
                                             <i class="ti-wallet"></i>
                                         </div>
                                     </div>
-                                    <div class="col-xs-7">
+                                    <div class="col-xs-10">
                                         <div class="numbers">
-                                            <p>Unconfirmed Balance</p>
-                                            <div id="unconfirmedBalance"></div>
+                                            <p>Pending Balance</p>
+                                            <div id="pendingBalance"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -258,12 +244,12 @@
                         <div class="card">
                             <div class="content">
                                 <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-info text-center">
+                                    <div class="col-xs-2">
+                                        <div class="icon-big icon-info">
                                             <i class="ti-wallet"></i>
                                         </div>
                                     </div>
-                                    <div class="col-xs-7">
+                                    <div class="col-xs-10">
                                         <div class="numbers">
                                             <p>Lifetime Balance</p>
                                             <div id="lifetimeBalance"></div>
@@ -279,7 +265,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-lg-8 col-sm-8">
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Hash Rate</h4>
