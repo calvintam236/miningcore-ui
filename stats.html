@@ -399,7 +399,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         loadPools()
-            .done(function () {
+            .always(function () {//debug,should be done()
                 function render() {
                     setInterval(function load() {
                         loadStatsData();
@@ -414,26 +414,7 @@
                 render();
                 $('#poolList li a').on('click', function (event) {
                     currentPool = $(event.target).attr('data-id');
-                    render();
-                });
-            })
-            .fail(alert('API dead'))
-            //always() for debug
-            .always(function () {
-                function render() {
-                    setInterval(function load() {
-                        loadStatsData();
-                        return load;
-                    }(), 10000);
-                    setInterval(function load() {
-                        loadStatsChart();
-                        return load;
-                    }(), 600000);
-                }
-
-                render();
-                $('#poolList li a').on('click', function (event) {
-                    currentPool = $(event.target).attr('data-id');
+                    loadPools();
                     render();
                 });
             });

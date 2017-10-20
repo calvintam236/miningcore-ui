@@ -192,18 +192,10 @@
 <script type="text/javascript">
     $(document).ready(function () {
         loadPools()
-            .done(function () {
+            .always(function () {//debug,should be done()
                 $('#poolList li a').on('click', function (event) {
                     currentPool = $(event.target).attr('data-id');
-                    loadPaymentsList();
-                });
-                loadBlocksList();
-            })
-            .fail(alert('API dead'))
-            //always() for debug
-            .always(function () {
-                $('#poolList li a').on('click', function (event) {
-                    currentPool = $(event.target).attr('data-id');
+                    loadPools();
                     loadPaymentsList();
                 });
                 loadBlocksList();
