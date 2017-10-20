@@ -58,6 +58,11 @@ function loadStatsData() {
                     // poolBlocks
                     $('#poolBlocks').text('0');//debug
                     $('#poolMiners').text(value.poolStats.connectedMiners);
+                    $('#payoutScheme').text(value.paymentProcessing.payoutScheme);
+                    $('#minimumPayment1').text(value.paymentProcessing.minimumPayment);
+                    $('#minimumPayment2').text(value.paymentProcessing.minimumPaymentToPaymentId);
+                    $('#poolFeePercent').text(value.poolFeePercent + '%');
+                    $('#donationsPercent').text(value.donationsPercent + '%');
                     $('#poolHashRate').text(value.poolStats.poolHashRate + ' H/s');
                     $('#networkHashRate').text(value.networkStats.networkHashRate + ' H/s');
                     $('#networkDifficulty').text(value.networkStats.networkDifficulty);
@@ -215,19 +220,19 @@ function loadDashboardChart(walletAddress, workerName) {
 
             labels = [];
             poolHashRate = [];
-            youHashRate = [];
+            minerHashRate = [];
             maxHashRate = 0;
 
             $.each(data.stats, function (index, value) {
                 labels.push(new Date(value.created).toLocaleTimeString());
                 poolHashRate.push(value.poolHashRate);
-                youHashRate.push(5);//debug
+                minerHashRate.push(5);//debug
                 if (value.poolHashRate > maxHashRate) {
                     maxHashRate = value.poolHashRate;
                 }
                 /*
-                if (value.youHashRate > maxHashRate) {
-                  maxHashRate = value.youHashRate;
+                if (value.minerHashRate > maxHashRate) {
+                  maxHashRate = value.minerHashRate;
                 }
                 */
             });
@@ -236,7 +241,7 @@ function loadDashboardChart(walletAddress, workerName) {
                 labels: labels,
                 series: [
                     poolHashRate,
-                    youHashRate
+                    minerHashRate
                 ]
             };
 
