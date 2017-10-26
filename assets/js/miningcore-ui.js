@@ -305,16 +305,18 @@ function loadDashboardChart(walletAddress) {
 function loadBlocksList() {
     return $.ajax(API + 'pool/' + currentPool + '/blocks')
         .always(function (data) {//debug,should be done()
-            data = JSON.parse('[{"blockHeight":2000197,"status":"pending","transactionConfirmationData":"6e7f68c7891e0f2fdbfd0086d88be3b0d57f1d8f4e1cb78ddc509506e312d94d","reward":17.55888124174,"infoLink":"https://xmrchain.net/block/6e7f68c7891e0f2fdbfd0086d88be3b0d57f1d8f4e1cb78ddc509506e312d94d","created":"2017-09-16T07:41:50.242856"},{"blockHeight":2000196,"status":"confirmed","transactionConfirmationData":"bb0b42b4936cfa210da7308938ad6d2d34c5339d45b61c750c1e0be2475ec039","reward":17.558898015821,"infoLink":"https://xmrchain.net/block/bb0b42b4936cfa210da7308938ad6d2d34c5339d45b61c750c1e0be2475ec039","created":"2017-09-16T07:41:39.664172"},{"blockHeight":2000195,"status":"orphaned","transactionConfirmationData":"b9b5943b2646ebfd19311da8031c66b164ace54a7f74ff82556213d9b54daaeb","reward":17.558914789917,"infoLink":"https://xmrchain.net/block/b9b5943b2646ebfd19311da8031c66b164ace54a7f74ff82556213d9b54daaeb","created":"2017-09-16T07:41:14.457664"}]');//debug
+            data = JSON.parse('[{"blockHeight":197,"status":"pending","effort":1.4,"confirmationProgress":0.3,"transactionConfirmationData":"6e7f68c7891e0f2fdbfd0086d88be3b0d57f1d8f4e1cb78ddc509506e312d94d","reward":17.55888124174,"infoLink":"https://xmrchain.net/block/6e7f68c7891e0f2fdbfd0086d88be3b0d57f1d8f4e1cb78ddc509506e312d94d","created":"2017-09-16T07:41:50.242856"},{"blockHeight":196,"status":"confirmed","effort":0.85,"confirmationProgress":1,"transactionConfirmationData":"bb0b42b4936cfa210da7308938ad6d2d34c5339d45b61c750c1e0be2475ec039","reward":17.558898015821,"infoLink":"https://xmrchain.net/block/bb0b42b4936cfa210da7308938ad6d2d34c5339d45b61c750c1e0be2475ec039","created":"2017-09-16T07:41:39.664172"},{"blockHeight":195,"status":"orphaned","effort":2.24,"confirmationProgress":0,"transactionConfirmationData":"b9b5943b2646ebfd19311da8031c66b164ace54a7f74ff82556213d9b54daaeb","reward":17.558914789917,"infoLink":"https://xmrchain.net/block/b9b5943b2646ebfd19311da8031c66b164ace54a7f74ff82556213d9b54daaeb","created":"2017-09-16T07:41:14.457664"}]');//debug
             //data = JSON.parse(data);
-            var blockList = '<thead><th>Date &amp; Time</th><th>Height</th><th>Status</th><th>Confirmation</th></thead><tbody>';
+            var blockList = '<thead><th>Date &amp; Time</th><th>Height</th><th>Effort</th></th><th>Status</th><th colspan="2">Confirmation</th></thead><tbody>';
             if (data.length > 0) {
                 $.each(data, function (index, value) {
                     blockList += '<tr>';
                     blockList += '<td>' + new Date(value.created).toLocaleString() + '</td>';
                     blockList += '<td>' + value.blockHeight + '</td>';
+                    blockList += '<td>' + value.effort + '</td>';
                     blockList += '<td>' + value.status + '</td>';
-                    blockList += '<td><a href="' + value.infoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 16) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 16) + ' </a></td>';
+                    blockList += '<td>' + value.confirmationProgress * 100 + '%</td>';
+                    blockList += '<td><a href="' + value.infoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 10) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 8) + ' </a></td>';
                     blockList += '</tr>'
                 });
             } else {
@@ -344,9 +346,9 @@ function loadPaymentsList() {
                 $.each(data, function (index, value) {
                     paymentList += '<tr>';
                     paymentList += '<td>' + new Date(value.created).toLocaleString() + '</td>';
-                    paymentList += '<td>' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 10) + '</td>';
+                    paymentList += '<td>' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 8) + '</td>';
                     paymentList += '<td>' + value.amount + '</td>';
-                    paymentList += '<td><a href="' + value.infoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 16) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 16) + ' </a></td>';
+                    paymentList += '<td><a href="' + value.infoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 10) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 8) + ' </a></td>';
                     paymentList += '</tr>'
                 });
             } else {
