@@ -167,7 +167,7 @@ function loadStatsChart() {
                             return value[0];
                         }
                     },
-                }]
+                }],
             ];
 
             Chartist.Line('#chartStatsMiners', data, options, responsiveOptions);
