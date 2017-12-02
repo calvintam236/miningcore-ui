@@ -5,7 +5,7 @@ var defaultPool = ''; //ID
 // current indicator + cache
 var currentPool = defaultPool;
 
-function loadPools() {
+function loadPools(renderCallback) {
     $('#currentPool b').remove();
     $('#currentPool ul').remove();
     return $.ajax(API + 'pools')
@@ -33,8 +33,11 @@ function loadPools() {
             }
             $('#poolList li a').on('click', function (event) {
                 currentPool = $(event.target).attr('data-id');
-                loadPools();
+                loadPools(renderCallback);
             });
+            if (renderCallback.has()) {
+                renderCallback.fire();
+            }
         })
         .fail(function () {
             $.notify({

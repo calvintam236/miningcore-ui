@@ -421,23 +421,24 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        loadPools()
-            .always(function () {//debug,should be done()
-                function render() {
-                    clearInterval();
-                    walletAddress = $('#walletAddress').val();
-                    setInterval(function load() {
-                        loadDashboardData(walletAddress);
-                        loadDashboardWorkerList(walletAddress);
-                        loadDashboardChart(walletAddress)
-                        return load;
-                    }(), 60000);
-                }
+        var renderCallback = $.Callbacks();
+        renderCallback.add(function () {
+            function render() {
+                clearInterval();
+                walletAddress = $('#walletAddress').val();
+                setInterval(function load() {
+                    loadDashboardData(walletAddress);
+                    loadDashboardWorkerList(walletAddress);
+                    loadDashboardChart(walletAddress);
+                    return load;
+                }(), 60000);
+            }
 
-                $('#walletAddress').on('change', function (event) {
-                    render();
-                });
+            $('#walletAddress').on('change', function (event) {
+                render();
             });
+        });
+        loadPools(renderCallback);
     });
 </script>
 

@@ -179,10 +179,11 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        loadPools()
-            .always(function () {//debug,should be done()
-                loadBlocksList();
-            });
+        var renderCallback = $.Callbacks();
+        renderCallback.add(function () {
+            loadBlocksList();
+        });
+        loadPools(renderCallback);
     });
 </script>
 

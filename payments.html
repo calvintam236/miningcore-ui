@@ -180,10 +180,11 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        loadPools()
-            .always(function () {//debug,should be done()
-                loadPaymentsList();
-            });
+        var renderCallback = $.Callbacks();
+        renderCallback.add(function () {
+            loadPaymentsList();
+        });
+        loadPools(renderCallback);
     });
 </script>
 

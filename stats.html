@@ -413,21 +413,22 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        loadPools()
-            .always(function () {//debug,should be done()
-                function render() {
-                    setInterval(function load() {
-                        loadStatsData();
-                        return load;
-                    }(), 10000);
-                    setInterval(function load() {
-                        loadStatsChart();
-                        return load;
-                    }(), 600000);
-                }
+        var renderCallback = $.Callbacks();
+        renderCallback.add(function () {
+            function render() {
+                setInterval(function load() {
+                    loadStatsData();
+                    return load;
+                }(), 10000);
+                setInterval(function load() {
+                    loadStatsChart();
+                    return load;
+                }(), 600000);
+            }
 
-                render();
-            });
+            render();
+        });
+        loadPools(renderCallback);
     });
 </script>
 
