@@ -31,6 +31,10 @@ function loadPools() {
             if (poolList.length > 0) {
                 $('#poolList').append(poolList);
             }
+            $('#poolList li a').on('click', function (event) {
+                currentPool = $(event.target).attr('data-id');
+                loadPools();
+            });
         })
         .fail(function () {
             $.notify({

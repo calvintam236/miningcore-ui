@@ -182,11 +182,6 @@
     $(document).ready(function () {
         loadPools()
             .always(function () {//debug,should be done()
-                $('#poolList li a').on('click', function (event) {
-                    currentPool = $(event.target).attr('data-id');
-                    loadPools();
-                    loadPaymentsList();
-                });
                 loadPaymentsList();
             });
     });
