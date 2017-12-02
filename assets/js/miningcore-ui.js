@@ -39,10 +39,10 @@ function loadPools() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadPools)"
+                message: "Error: No response from API.<br>(loadPools)",
             }, {
                 type: 'danger',
-                timer: 3000
+                timer: 3000,
             });
         });
 }
@@ -73,10 +73,10 @@ function loadStatsData() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadStatsData)"
+                message: "Error: No response from API.<br>(loadStatsData)",
             }, {
                 type: 'danger',
-                timer: 3000
+                timer: 3000,
             });
         });
 }
@@ -112,8 +112,8 @@ function loadStatsChart() {
                 labels: labels,
                 series: [
                     networkHashRate,
-                    poolHashRate
-                ]
+                    poolHashRate,
+                ],
             };
 
             var options = {
@@ -126,7 +126,7 @@ function loadStatsChart() {
                     showGrid: false,
                 },
                 lineSmooth: Chartist.Interpolation.simple({
-                    divisor: 2
+                    divisor: 2,
                 }),
                 showLine: true,
                 showPoint: false,
@@ -138,8 +138,8 @@ function loadStatsChart() {
                         labelInterpolationFnc: function (value) {
                             return value[0];
                         }
-                    }
-                }]
+                    },
+                }],
             ];
 
             Chartist.Line('#chartStatsHashRate', data, options, responsiveOptions);
@@ -147,16 +147,16 @@ function loadStatsChart() {
             var data = {
                 labels: labels,
                 series: [
-                    connectedMiners
-                ]
+                    connectedMiners,
+                ],
             };
 
             var options = {
                 seriesBarDistance: 10,
                 axisX: {
-                    showGrid: false
+                    showGrid: false,
                 },
-                height: "245px"
+                height: "245px",
             };
 
             var responsiveOptions = [
@@ -166,7 +166,7 @@ function loadStatsChart() {
                         labelInterpolationFnc: function (value) {
                             return value[0];
                         }
-                    }
+                    },
                 }]
             ];
 
@@ -175,14 +175,13 @@ function loadStatsChart() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadStatsChart)"
+                message: "Error: No response from API.<br>(loadStatsChart)",
             }, {
                 type: 'danger',
-                timer: 3000
+                timer: 3000,
             });
         });
-
-};
+}
 
 function loadDashboardData(walletAddress) {
     return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
@@ -197,10 +196,10 @@ function loadDashboardData(walletAddress) {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadDashboardData)"
+                message: "Error: No response from API.<br>(loadDashboardData)",
             }, {
                 type: 'danger',
-                timer: 3000
+                timer: 3000,
             });
         });
 }
@@ -227,10 +226,10 @@ function loadDashboardWorkerList(walletAddress) {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadDashboardWorkerList)"
+                message: "Error: No response from API.<br>(loadDashboardWorkerList)",
             }, {
                 type: 'danger',
-                timer: 3000
+                timer: 3000,
             });
         });
 }
@@ -263,8 +262,8 @@ function loadDashboardChart(walletAddress) {
                 labels: labels,
                 series: [
                     poolHashRate,
-                    minerHashRate
-                ]
+                    minerHashRate,
+                ],
             };
 
             var options = {
@@ -277,7 +276,7 @@ function loadDashboardChart(walletAddress) {
                     showGrid: false,
                 },
                 lineSmooth: Chartist.Interpolation.simple({
-                    divisor: 2
+                    divisor: 2,
                 }),
                 showLine: true,
                 showPoint: false,
@@ -290,7 +289,7 @@ function loadDashboardChart(walletAddress) {
                             return value[0];
                         }
                     }
-                }]
+                }],
             ];
 
             Chartist.Line('#chartDashboardHashRate', data, options, responsiveOptions);
@@ -298,10 +297,10 @@ function loadDashboardChart(walletAddress) {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadDashboardChart)"
+                message: "Error: No response from API.<br>(loadDashboardChart)",
             }, {
                 type: 'danger',
-                timer: 3000
+                timer: 3000,
             });
         });
 }
@@ -332,10 +331,10 @@ function loadBlocksList() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadBlocksList)"
+                message: "Error: No response from API.<br>(loadBlocksList)",
             }, {
                 type: 'danger',
-                timer: 3000
+                timer: 3000,
             });
         });
 }
@@ -353,7 +352,7 @@ function loadPaymentsList() {
                     paymentList += '<td>' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 8) + '</td>';
                     paymentList += '<td>' + value.amount + '</td>';
                     paymentList += '<td><a href="' + value.infoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 10) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 8) + ' </a></td>';
-                    paymentList += '</tr>'
+                    paymentList += '</tr>';
                 });
             } else {
                 paymentList += '<tr><td colspan="4">None</td></tr>';
@@ -364,10 +363,10 @@ function loadPaymentsList() {
         .fail(function () {
             $.notify({
                 icon: "ti-cloud-down",
-                message: "Error: No response from API.<br>(loadPaymentsList)"
+                message: "Error: No response from API.<br>(loadPaymentsList)",
             }, {
                 type: 'danger',
-                timer: 3000
+                timer: 3000,
             });
         });
 }
