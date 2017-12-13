@@ -425,7 +425,7 @@
         renderCallback.add(function () {
             function render() {
                 clearInterval();
-                walletAddress = $('#walletAddress').val();
+                var walletAddress = $('#walletAddress').val();
                 setInterval(function load() {
                     loadDashboardData(walletAddress);
                     loadDashboardWorkerList(walletAddress);
