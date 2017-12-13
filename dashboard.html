@@ -434,7 +434,8 @@
                 }(), 60000);
             }
 
-            $('#walletAddress').on('change', function (event) {
+            $('#walletAddress').on('input', function () {
+                // idea: only submit if the value is a valid wallet address
                 render();
             });
         });
