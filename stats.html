@@ -271,9 +271,10 @@
                     <div class="col-lg-12 col-sm-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Pool Config</h4>
+                                <h4 class="title">Pool Info</h4>
+                                <p class="category">This shows the current pool settings.</p>
                             </div>
-                            <div class="content">
+                            <div class="content table-responsive table-full-width">
                                 <table id="poolConfig" class="table table-striped">
                                     <thead>
                                     <tr>
@@ -282,6 +283,10 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    <tr>
+                                        <td>Wallet Address</td>
+                                        <td id="walletAddress"></td>
+                                    </tr>
                                     <tr>
                                         <td>Payout Scheme</td>
                                         <td id="payoutScheme"></td>
@@ -296,11 +301,7 @@
                                     </tr>
                                     <tr>
                                         <td>Pool Fee</td>
-                                        <td id="poolFeePercent"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Donation</td>
-                                        <td id="donationsPercent"></td>
+                                        <td id="poolFee"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -329,11 +330,11 @@
                         </div>
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Luck</h4>
+                                <h4 class="title">Efforts</h4>
                                 <p class="category">Last 10 blocks</p>
                             </div>
                             <div class="content">
-                                <!--<div id="chartStatsLuck" class="ct-chart ct-perfect-fourth"></div>-->
+                                <!--<div id="chartStatsEfforts" class="ct-chart ct-perfect-fourth"></div>-->
                                 <div class="footer">
                                     <!--<div class="chart-legend">
                                         <i class="fa fa-circle text-info"></i> Open
