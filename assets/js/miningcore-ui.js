@@ -62,11 +62,6 @@ function loadStatsData() {
                     // poolBlocks
                     $('#poolBlocks').text('0');//debug
                     $('#poolMiners').text(value.poolStats.connectedMiners);
-                    $('#walletAddress').html('<a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 8) + '</a>');
-                    $('#payoutScheme').text(value.paymentProcessing.payoutScheme);
-                    $('#minimumPayment1').text(value.paymentProcessing.minimumPayment + ' ' + value.coin.type);
-                    $('#minimumPayment2').text(value.paymentProcessing.minimumPaymentToPaymentId + ' ' + value.coin.type);
-                    $('#poolFee').text(value.poolFeePercent + '%');
                     $('#poolHashRate').text(value.poolStats.poolHashRate + ' H/s');
                     $('#networkHashRate').text(value.networkStats.networkHashRate + ' H/s');
                     $('#networkDifficulty').text(value.networkStats.networkDifficulty);
@@ -365,6 +360,44 @@ function loadPaymentsList() {
             $.notify({
                 icon: "ti-cloud-down",
                 message: "Error: No response from API.<br>(loadPaymentsList)",
+            }, {
+                type: 'danger',
+                timer: 3000,
+            });
+        });
+}
+
+function loadConnectConfig() {
+    return $.ajax(API + 'pools')
+        .always(function (data) {//debug,should be done()
+            data = JSON.parse('{"pools":[{"id":"xmr1","coin":{"type":"XMR"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://explorer.zcha.in/accounts/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","poolStats":{"connectedMiners":0,"poolHashRate":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}},{"id":"eth1","coin":{"type":"ETH"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://explorer.zcha.in/accounts/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","poolStats":{"connectedMiners":0,"poolHashRate":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}}]}');//debug
+            //data = JSON.parse(data);
+            var connectPoolConfig = '<thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>';
+            $.each(data.pools, function (index, value) {
+                if (currentPool === value.id) {
+                    connectPoolConfig += '<tr><td>Wallet Address</td><td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 8) + '</a></td></tr>';
+                    connectPoolConfig += '<tr><td>Payout Scheme</td><td>' + value.paymentProcessing.payoutScheme + '</td></tr>';
+                    connectPoolConfig += '<tr><td>Minimum Payment w/o #</td><td>' + value.paymentProcessing.minimumPayment + ' ' + value.coin.type + '</td></tr>';
+                    connectPoolConfig += '<tr><td>Minimum Payment w/ #</td><td>' + value.paymentProcessing.minimumPaymentToPaymentId + ' ' + value.coin.type + '</td></tr>';
+                    connectPoolConfig += '<tr><td>Pool Fee</td><td>' + value.poolFeePercent + '%</td></tr>';
+                    $.each(value.ports, function (port, options) {
+                        connectPoolConfig += '<tr><td>Port ' + port + ' Difficulty</td><td>'
+                        if (typeof(options.varDiff) !== "undefined") {
+                            connectPoolConfig += 'Variable / ' + options.varDiff.minDiff + ' &harr; ' + options.varDiff.maxDiff;
+                        } else {
+                            connectPoolConfig += 'Static / ' + options.difficulty;
+                        }
+                        connectPoolConfig += '</td></tr>';
+                    });
+                }
+            });
+            connectPoolConfig += '</tbody>';
+            $('#connectPoolConfig').html(connectPoolConfig);
+        })
+        .fail(function () {
+            $.notify({
+                icon: "ti-cloud-down",
+                message: "Error: No response from API.<br>(loadConnectConfig)",
             }, {
                 type: 'danger',
                 timer: 3000,
