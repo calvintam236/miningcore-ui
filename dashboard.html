@@ -168,7 +168,7 @@
                                 <div class="footer">
                                     <hr/>
                                     <div class="stats">
-                                        <i class="ti-reload"></i> Last 60 seconds
+                                        <i class="ti-reload"></i> Update every minute
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +193,7 @@
                                 <div class="footer">
                                     <hr/>
                                     <div class="stats">
-                                        <i class="ti-reload"></i> Last 60 seconds
+                                        <i class="ti-reload"></i> Update every minute
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +204,7 @@
                             <div class="content">
                                 <div class="row">
                                     <div class="col-xs-2">
-                                        <div class="icon-big icon-success">
+                                        <div class="icon-big icon-warning">
                                             <i class="ti-wallet"></i>
                                         </div>
                                     </div>
@@ -218,7 +218,7 @@
                                 <div class="footer">
                                     <hr/>
                                     <div class="stats">
-                                        <i class="ti-reload"></i> Last 60 seconds
+                                        <i class="ti-reload"></i> Update every minute
                                     </div>
                                 </div>
                             </div>
@@ -235,6 +235,31 @@
                                     </div>
                                     <div class="col-xs-10">
                                         <div class="numbers">
+                                            <p>Paid Balance</p>
+                                            <div id="paidBalance"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <hr/>
+                                    <div class="stats">
+                                        <i class="ti-reload"></i> Update every minute
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <div class="icon-big icon-success">
+                                            <i class="ti-wallet"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <div class="numbers">
                                             <p>Lifetime Balance</p>
                                             <div id="lifetimeBalance"></div>
                                         </div>
@@ -243,7 +268,7 @@
                                 <div class="footer">
                                     <hr/>
                                     <div class="stats">
-                                        <i class="ti-reload"></i> Last 60 seconds
+                                        <i class="ti-reload"></i> Update every minute
                                     </div>
                                 </div>
                             </div>
@@ -253,19 +278,10 @@
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Online Workers</h4>
-                                <p class="category">Last 10 seconds</p>
+                                <p class="category">Last 1 minute</p>
                             </div>
                             <div class="content table-responsive table-full-width">
-                                <table id="poolConfig" class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Hash Rate</th>
-                                        <th>Shares</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+                                <table id="workerList" class="table table-striped"></table>
                             </div>
                         </div>
                     </div>
@@ -279,12 +295,11 @@
                                 <div id="chartDashboardHashRate" class="ct-chart"></div>
                                 <div class="footer">
                                     <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i> Pool
-                                        <i class="fa fa-circle text-warning"></i> You
+                                        <i class="fa fa-circle text-danger"></i> Miner
                                     </div>
                                     <hr>
                                     <div class="stats">
-                                        <i class="ti-reload"></i> Last 60 seconds
+                                        <i class="ti-reload"></i> Update every minute
                                     </div>
                                 </div>
                             </div>

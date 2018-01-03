@@ -5,13 +5,32 @@ var defaultPool = ''; //ID
 // current indicator + cache
 var currentPool = defaultPool;
 
+// private function
+function _formatter(value, decimal, unit) {
+    var si = [
+        { value: 1E-6, symbol: "μ" },
+        { value: 1E-3, symbol: "m" },
+        { value: 1, symbol: "" },
+        { value: 1E3, symbol: "k" },
+        { value: 1E6, symbol: "M" },
+        { value: 1E9, symbol: "G" },
+        { value: 1E12, symbol: "T" },
+        { value: 1E15, symbol: "P" },
+        { value: 1E18, symbol: "E" },
+    ];
+    for (var i = si.length - 1; i > 0; i--) {
+        if (value >= si[i].value) {
+            break;
+        }
+    }
+    return (value / si[i].value).toFixed(decimal).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + ' ' + si[i].symbol + unit;
+}
+
 function loadPools(renderCallback) {
     $('#currentPool b').remove();
     $('#currentPool ul').remove();
     return $.ajax(API + 'pools')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('{"pools":[{"id":"xmr1","coin":{"type":"XMR"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://explorer.zcha.in/accounts/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","poolStats":{"connectedMiners":0,"poolHashRate":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}},{"id":"eth1","coin":{"type":"ETH"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://explorer.zcha.in/accounts/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","poolStats":{"connectedMiners":0,"poolHashRate":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}}]}');//debug
-            //data = JSON.parse(data);
+        .done(function (data) {
             var poolList = '<ul class="dropdown-menu">';
             if (data.pools.length > 1) {
                 $('#currentPool').append('<b class="caret"></b>');
@@ -52,19 +71,15 @@ function loadPools(renderCallback) {
 
 function loadStatsData() {
     return $.ajax(API + 'pools')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('{"pools":[{"id":"xmr1","coin":{"type":"XMR"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://explorer.zcha.in/accounts/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","poolStats":{"connectedMiners":0,"poolHashRate":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}},{"id":"eth1","coin":{"type":"ETH"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://explorer.zcha.in/accounts/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","poolStats":{"connectedMiners":0,"poolHashRate":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}}]}');//debug
-            //data = JSON.parse(data);
+        .done(function (data) {
             $.each(data.pools, function (index, value) {
                 if (currentPool === value.id) {
-                    // poolShares
-                    $('#poolShares').text('0');//debug
-                    // poolBlocks
-                    $('#poolBlocks').text('0');//debug
-                    $('#poolMiners').text(value.poolStats.connectedMiners);
-                    $('#poolHashRate').text(value.poolStats.poolHashRate + ' H/s');
-                    $('#networkHashRate').text(value.networkStats.networkHashRate + ' H/s');
-                    $('#networkDifficulty').text(value.networkStats.networkDifficulty);
+                    //$('#poolShares').text(_formatter(value, 0, ''));
+                    //$('#poolBlocks').text(_formatter(value, 0, ''));
+                    $('#poolMiners').text(_formatter(value.poolStats.connectedMiners, 0, ''));
+                    $('#poolHashRate').text(_formatter(value.poolStats.poolHashRate, 5, 'H/s'));
+                    $('#networkHashRate').text(_formatter(value.networkStats.networkHashRate, 5, 'H/s'));
+                    $('#networkDifficulty').text(_formatter(value.networkStats.networkDifficulty, 5, ''));
                 }
             });
         })
@@ -81,20 +96,30 @@ function loadStatsData() {
 
 function loadStatsChart() {
     return $.ajax(API + 'pool/' + currentPool + '/stats/hourly')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('{"stats":[{"poolHashRate":20,"connectedMiners":12,"created":"2017-09-16T10:00:00"},{"poolHashRate":25,"connectedMiners":15,"created":"2017-09-16T11:00:00"},{"poolHashRate":23,"connectedMiners":13,"created":"2017-09-17T10:00:00"}]}');//debug
-            //data = JSON.parse(data);
+        .done(function (data) {
             labels = [];
             connectedMiners = [];
             networkHashRate = [];
             poolHashRate = [];
+            lowHashRate = 1e18;
             maxHashRate = 0;
 
             $.each(data.stats, function (index, value) {
-                labels.push(new Date(value.created).toLocaleTimeString());
+                if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
+                    labels.push(new Date(value.created).toLocaleTimeString());
+                } else {
+                    labels.push('');
+                }
                 //networkHashRate.push(value.networkHashRate);
-                networkHashRate.push(30);//debug
                 poolHashRate.push(value.poolHashRate);
+                /*
+                if (value.networkHashRate < lowHashRate) {
+                    lowHashRate = value.poolHashRate;
+                }
+                */
+                if (value.poolHashRate < lowHashRate) {
+                    lowHashRate = value.poolHashRate;
+                }
                 /*
                 if (value.networkHashRate > maxHashRate) {
                   maxHashRate = value.poolHashRate;
@@ -115,12 +140,17 @@ function loadStatsChart() {
             };
 
             var options = {
-                low: 0,
+                low: lowHashRate * 0.9,
                 high: maxHashRate * 1.1,
                 showArea: true,
                 height: "245px",
                 axisX: {
                     showGrid: false,
+                },
+                axisY: {
+                    labelInterpolationFnc: function(value) {
+                        return _formatter(value, 0, '');
+                    }
                 },
                 lineSmooth: Chartist.Interpolation.simple({
                     divisor: 2,
@@ -153,6 +183,9 @@ function loadStatsChart() {
                 axisX: {
                     showGrid: false,
                 },
+                axisY: {
+                    onlyInteger: true,
+                },
                 height: "245px",
             };
 
@@ -182,13 +215,16 @@ function loadStatsChart() {
 
 function loadDashboardData(walletAddress) {
     return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('{"pendingShares":354,"pendingBalance":1.456,"totalPaid":12.354}');//debug
-            //data = JSON.parse(data);
-            $('#unconfirmedShares').text(data.pendingShares);
-            //$('#minerHashRate').text(data.minerHashRate);
-            $('#unconfirmedBalance').text(data.pendingBalance);
-            //$('#lifetimeBalance').text(data.lifetimeBalance);
+        .done(function (data) {
+            $('#unconfirmedShares').text(_formatter(data.result.pendingShares), 0, 'S');
+            var workerHashRate = 0;
+            $.each(data.result.performance.workers, function (index, value) {
+                workerHashRate += value.hashrate;
+            });
+            $('#minerHashRate').text(_formatter(workerHashRate, 5, 'H/s'));
+            $('#pendingBalance').text(_formatter(data.result.pendingBalance), 5, '');
+            $('#paidBalance').text(_formatter(data.result.totalPaid), 5, '');
+            $('#lifetimeBalance').text(_formatter(data.result.pendingBalance + data.result.totalPaid), 5, '');
         })
         .fail(function () {
             $.notify({
@@ -203,19 +239,18 @@ function loadDashboardData(walletAddress) {
 
 function loadDashboardWorkerList(walletAddress) {
     return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('{"stats":[{"poolHashRate":20,"connectedMiners":12,"created":"2017-09-16T10:00:00"},{"poolHashRate":25,"connectedMiners":15,"created":"2017-09-16T11:00:00"},{"poolHashRate":23,"connectedMiners":13,"created":"2017-09-17T10:00:00"}]}');//debug
-            //data = JSON.parse(data);
-            var workerList = '<thead><th>Name</th><th>Hash Rate</th></thead><tbody>';
-            if (data.length > 0) {
-                $.each(data, function (index, value) {
+        .done(function (data) {
+            var workerList = '<thead><th>Name</th><th>Hash Rate</th><th>Share Rate</th></thead><tbody>';
+            if (data.result.performance.length > 0) {
+                $.each(data.result.performance.workers, function (index, value) {
                     workerList += '<tr>';
-                    //workerList += '<td>' + value.blockHeight + '</td>';
-                    //workerList += '<td>' + value.status + '</td>';
+                    workerList += '<td>' + index + '</td>';
+                    workerList += '<td>' + _formatter(value.hashrate, 5, 'H/s') + '</td>';
+                    workerList += '<td>' + _formatter(value.sharesPerSecond, 5, 'S/s') + '</td>';
                     workerList += '</tr>'
                 });
             } else {
-                workerList += '<tr><td colspan="4">None</td></tr>';
+                workerList += '<tr><td colspan="3">None</td></tr>';
             }
             workerList += '</tbody>';
             $('#workerList').html(workerList);
@@ -233,26 +268,29 @@ function loadDashboardWorkerList(walletAddress) {
 
 function loadDashboardChart(walletAddress) {
     return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('{"stats":[{"poolHashRate":20,"connectedMiners":12,"created":"2017-09-16T10:00:00"},{"poolHashRate":25,"connectedMiners":15,"created":"2017-09-16T11:00:00"},{"poolHashRate":23,"connectedMiners":13,"created":"2017-09-17T10:00:00"}]}');//debug
-            //data = JSON.parse(data);
+        .done(function (data) {
             labels = [];
-            poolHashRate = [];
             minerHashRate = [];
+            lowHashRate = 1e18;
             maxHashRate = 0;
 
-            $.each(data.stats, function (index, value) {
-                labels.push(new Date(value.created).toLocaleTimeString());
-                poolHashRate.push(value.poolHashRate);
-                minerHashRate.push(5);//debug
-                if (value.poolHashRate > maxHashRate) {
-                    maxHashRate = value.poolHashRate;
+            $.each(data.result.performance, function (index, value) {
+                if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
+                    labels.push(new Date(value.created).toLocaleTimeString());
+                } else {
+                    labels.push('');
                 }
-                /*
-                if (value.minerHashRate > maxHashRate) {
-                  maxHashRate = value.minerHashRate;
+                var workerHashRate = 0;
+                $.each(value.workers, function (index2, value2) {
+                    workerHashRate += value2.hashrate;
+                });
+                minerHashRate.push(workerHashRate);
+                if (workerHashRate < lowHashRate) {
+                    lowHashRate = value.minerHashRate;
                 }
-                */
+                if (workerHashRate > maxHashRate) {
+                    maxHashRate = value.minerHashRate;
+                }
             });
 
             var data = {
@@ -264,12 +302,17 @@ function loadDashboardChart(walletAddress) {
             };
 
             var options = {
-                low: 0,
+                low: lowHashRate * 0.9,
                 high: maxHashRate * 1.1,
                 showArea: true,
                 height: "245px",
                 axisX: {
                     showGrid: false,
+                },
+                axisY: {
+                    labelInterpolationFnc: function(value) {
+                        return _formatter(value, 0, '');
+                    }
                 },
                 lineSmooth: Chartist.Interpolation.simple({
                     divisor: 2,
@@ -303,9 +346,7 @@ function loadDashboardChart(walletAddress) {
 
 function loadBlocksList() {
     return $.ajax(API + 'pool/' + currentPool + '/blocks')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('[{"blockHeight":197,"status":"pending","effort":1.4,"confirmationProgress":0.3,"transactionConfirmationData":"6e7f68c7891e0f2fdbfd0086d88be3b0d57f1d8f4e1cb78ddc509506e312d94d","reward":17.55888124174,"infoLink":"https://xmrchain.net/block/6e7f68c7891e0f2fdbfd0086d88be3b0d57f1d8f4e1cb78ddc509506e312d94d","created":"2017-09-16T07:41:50.242856"},{"blockHeight":196,"status":"confirmed","effort":0.85,"confirmationProgress":1,"transactionConfirmationData":"bb0b42b4936cfa210da7308938ad6d2d34c5339d45b61c750c1e0be2475ec039","reward":17.558898015821,"infoLink":"https://xmrchain.net/block/bb0b42b4936cfa210da7308938ad6d2d34c5339d45b61c750c1e0be2475ec039","created":"2017-09-16T07:41:39.664172"},{"blockHeight":195,"status":"orphaned","effort":2.24,"confirmationProgress":0,"transactionConfirmationData":"b9b5943b2646ebfd19311da8031c66b164ace54a7f74ff82556213d9b54daaeb","reward":17.558914789917,"infoLink":"https://xmrchain.net/block/b9b5943b2646ebfd19311da8031c66b164ace54a7f74ff82556213d9b54daaeb","created":"2017-09-16T07:41:14.457664"}]');//debug
-            //data = JSON.parse(data);
+        .done(function (data) {
             var blockList = '<thead><th>Date &amp; Time</th><th>Height</th><th>Effort</th></th><th>Status</th><th colspan="2">Confirmation</th></thead><tbody>';
             if (data.length > 0) {
                 $.each(data, function (index, value) {
@@ -337,15 +378,13 @@ function loadBlocksList() {
 
 function loadPaymentsList() {
     return $.ajax(API + 'pool/' + currentPool + '/payments')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('[{"coin":"XMR","address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://xmrchain.net/addr/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","amount":7.5354,"transactionConfirmationData":"9e7f68c7891e0f2fdbfd0086d88be3b0d57f1d8f4e1cb78ddc509506e312d94d","transactionInfoLink":"https://xmrchain.net/tx/9e7f68c7891e0f2fdbfd0086d88be3b0d57f1d8f4e1cb78ddc509506e312d94d","created":"2017-09-16T07:41:50.242856"}]');//debug
-            //data = JSON.parse(data);
+        .done(function (data) {
             var paymentList = '<thead><th>Date &amp; Time</th><th>Address</th><th>Amount</th><th>Confirmation</th></thead><tbody>';
             if (data.length > 0) {
                 $.each(data, function (index, value) {
                     paymentList += '<tr>';
                     paymentList += '<td>' + new Date(value.created).toLocaleString() + '</td>';
-                    paymentList += '<td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 8) + '</td>';
+                    paymentList += '<td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 8) + ' &hellip; ' + value.address.substring(value.address.length - 6) + '</td>';
                     paymentList += '<td>' + value.amount + '</td>';
                     paymentList += '<td><a href="' + value.transactionInfoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 10) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 8) + ' </a></td>';
                     paymentList += '</tr>';
@@ -369,16 +408,16 @@ function loadPaymentsList() {
 
 function loadConnectConfig() {
     return $.ajax(API + 'pools')
-        .always(function (data) {//debug,should be done()
-            data = JSON.parse('{"pools":[{"id":"xmr1","coin":{"type":"XMR"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://explorer.zcha.in/accounts/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","poolStats":{"connectedMiners":0,"poolHashRate":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}},{"id":"eth1","coin":{"type":"ETH"},"ports":{"4032":{"difficulty":1600,"varDiff":{"minDiff":1600,"maxDiff":160000,"targetTime":15,"retargetTime":90,"variancePercent":30}},"4256":{"difficulty":5000}},"paymentProcessing":{"enabled":true,"minimumPayment":0.01,"payoutScheme":"PPLNS","payoutSchemeConfig":{"factor":2},"minimumPaymentToPaymentId":5},"banning":{"enabled":true,"checkThreshold":50,"invalidPercent":50,"time":600},"clientConnectionTimeout":600,"jobRebroadcastTimeout":55,"blockRefreshInterval":1000,"poolFeePercent":0,"address":"9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","addressInfoLink":"https://explorer.zcha.in/accounts/9wviCeWe2D8XS82k2ovp5EUYLzBt9pYNW2LXUFsZiv8S3Mt21FZ5qQaAroko1enzw3eGr9qC7X1D7Geoo2RrAotYPwq9Gm8","poolStats":{"connectedMiners":0,"poolHashRate":0},"networkStats":{"networkType":"Test","networkHashRate":39.05,"networkDifficulty":2343,"lastNetworkBlockTime":"2017-09-17T10:35:55.0394813Z","blockHeight":157,"connectedPeers":2,"rewardType":"POW"}}]}');//debug
-            //data = JSON.parse(data);
+        .done(function (data) {
             var connectPoolConfig = '<thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>';
             $.each(data.pools, function (index, value) {
                 if (currentPool === value.id) {
-                    connectPoolConfig += '<tr><td>Wallet Address</td><td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 10) + ' &hellip; ' + value.address.substring(value.address.length - 8) + '</a></td></tr>';
+                    connectPoolConfig += '<tr><td>Wallet Address</td><td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 8) + ' &hellip; ' + value.address.substring(value.address.length - 6) + '</a></td></tr>';
                     connectPoolConfig += '<tr><td>Payout Scheme</td><td>' + value.paymentProcessing.payoutScheme + '</td></tr>';
                     connectPoolConfig += '<tr><td>Minimum Payment w/o #</td><td>' + value.paymentProcessing.minimumPayment + ' ' + value.coin.type + '</td></tr>';
-                    connectPoolConfig += '<tr><td>Minimum Payment w/ #</td><td>' + value.paymentProcessing.minimumPaymentToPaymentId + ' ' + value.coin.type + '</td></tr>';
+                    if (typeof(value.paymentProcessing.minimumPaymentToPaymentId) !== "undefined") {
+                        connectPoolConfig += '<tr><td>Minimum Payment w/ #</td><td>' + value.paymentProcessing.minimumPaymentToPaymentId + ' ' + value.coin.type + '</td></tr>';
+                    }
                     connectPoolConfig += '<tr><td>Pool Fee</td><td>' + value.poolFeePercent + '%</td></tr>';
                     $.each(value.ports, function (port, options) {
                         connectPoolConfig += '<tr><td>Port ' + port + ' Difficulty</td><td>'
