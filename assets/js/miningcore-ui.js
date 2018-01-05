@@ -7,23 +7,27 @@ var currentPool = defaultPool;
 
 // private function
 function _formatter(value, decimal, unit) {
-    var si = [
-        { value: 1E-6, symbol: "μ" },
-        { value: 1E-3, symbol: "m" },
-        { value: 1, symbol: "" },
-        { value: 1E3, symbol: "k" },
-        { value: 1E6, symbol: "M" },
-        { value: 1E9, symbol: "G" },
-        { value: 1E12, symbol: "T" },
-        { value: 1E15, symbol: "P" },
-        { value: 1E18, symbol: "E" },
-    ];
-    for (var i = si.length - 1; i > 0; i--) {
-        if (value >= si[i].value) {
-            break;
+    if (value === 0) {
+        return '0 ' + unit;
+    } else {
+        var si = [
+            { value: 1e-6, symbol: "μ" },
+            { value: 1e-3, symbol: "m" },
+            { value: 1, symbol: "" },
+            { value: 1e3, symbol: "k" },
+            { value: 1e6, symbol: "M" },
+            { value: 1e9, symbol: "G" },
+            { value: 1e12, symbol: "T" },
+            { value: 1e15, symbol: "P" },
+            { value: 1e18, symbol: "E" },
+        ];
+        for (var i = si.length - 1; i > 0; i--) {
+            if (value >= si[i].value) {
+                break;
+            }
         }
+        return (value / si[i].value).toFixed(decimal).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + ' ' + si[i].symbol + unit;
     }
-    return (value / si[i].value).toFixed(decimal).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + ' ' + si[i].symbol + unit;
 }
 
 function loadPools(renderCallback) {
@@ -103,6 +107,8 @@ function loadStatsChart() {
             poolHashRate = [];
             lowHashRate = 1e18;
             maxHashRate = 0;
+            //lowMiners = 1e18;
+            //maxMiners = 0;
 
             $.each(data.stats, function (index, value) {
                 if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
@@ -110,25 +116,28 @@ function loadStatsChart() {
                 } else {
                     labels.push('');
                 }
-                //networkHashRate.push(value.networkHashRate);
-                poolHashRate.push(value.poolHashRate);
                 /*
+                networkHashRate.push(value.networkHashRate);
                 if (value.networkHashRate < lowHashRate) {
                     lowHashRate = value.poolHashRate;
+                } else if (value.networkHashRate > maxHashRate) {
+                    maxHashRate = value.poolHashRate;
                 }
                 */
+                poolHashRate.push(value.poolHashRate);
                 if (value.poolHashRate < lowHashRate) {
                     lowHashRate = value.poolHashRate;
-                }
-                /*
-                if (value.networkHashRate > maxHashRate) {
-                  maxHashRate = value.poolHashRate;
-                }
-                */
-                if (value.poolHashRate > maxHashRate) {
+                } else if (value.poolHashRate > maxHashRate) {
                     maxHashRate = value.poolHashRate;
                 }
                 connectedMiners.push(value.connectedMiners);
+                /*
+                if (value.connectedMiners < lowMiners) {
+                    lowMiners = value.connectedMiners;
+                } else if (value.connectedMiners < maxMiners){
+                    maxMiners = value.connectedMiners;
+                }
+                */
             });
 
             var data = {
@@ -140,8 +149,8 @@ function loadStatsChart() {
             };
 
             var options = {
-                low: lowHashRate * 0.9,
-                high: maxHashRate * 1.1,
+                low: lowHashRate,
+                high: maxHashRate,
                 showArea: true,
                 height: "245px",
                 axisX: {
@@ -149,7 +158,7 @@ function loadStatsChart() {
                 },
                 axisY: {
                     labelInterpolationFnc: function(value) {
-                        return _formatter(value, 0, '');
+                        return _formatter(value, 1, '');
                     }
                 },
                 lineSmooth: Chartist.Interpolation.simple({
@@ -179,12 +188,11 @@ function loadStatsChart() {
             };
 
             var options = {
+                //low: lowMiners,
+                //high: maxMiners,
                 seriesBarDistance: 10,
                 axisX: {
                     showGrid: false,
-                },
-                axisY: {
-                    onlyInteger: true,
                 },
                 height: "245px",
             };
@@ -287,8 +295,7 @@ function loadDashboardChart(walletAddress) {
                 minerHashRate.push(workerHashRate);
                 if (workerHashRate < lowHashRate) {
                     lowHashRate = value.minerHashRate;
-                }
-                if (workerHashRate > maxHashRate) {
+                } else if (workerHashRate > maxHashRate) {
                     maxHashRate = value.minerHashRate;
                 }
             });
@@ -302,8 +309,8 @@ function loadDashboardChart(walletAddress) {
             };
 
             var options = {
-                low: lowHashRate * 0.9,
-                high: maxHashRate * 1.1,
+                low: lowHashRate,
+                high: maxHashRate,
                 showArea: true,
                 height: "245px",
                 axisX: {
@@ -311,7 +318,7 @@ function loadDashboardChart(walletAddress) {
                 },
                 axisY: {
                     labelInterpolationFnc: function(value) {
-                        return _formatter(value, 0, '');
+                        return _formatter(value, 1, '');
                     }
                 },
                 lineSmooth: Chartist.Interpolation.simple({
@@ -422,7 +429,12 @@ function loadConnectConfig() {
                     $.each(value.ports, function (port, options) {
                         connectPoolConfig += '<tr><td>Port ' + port + ' Difficulty</td><td>'
                         if (typeof(options.varDiff) !== "undefined") {
-                            connectPoolConfig += 'Variable / ' + options.varDiff.minDiff + ' &harr; ' + options.varDiff.maxDiff;
+                            connectPoolConfig += 'Variable / ' + options.varDiff.minDiff + ' &harr; ';
+                            if (typeof(options.varDiff.maxDiff) === "undefined") {
+                                connectPoolConfig += '&infin;';
+                            } else {
+                                connectPoolConfig += options.varDiff.maxDiff;
+                            }
                         } else {
                             connectPoolConfig += 'Static / ' + options.difficulty;
                         }
