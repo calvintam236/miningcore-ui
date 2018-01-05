@@ -95,7 +95,7 @@ function loadStatsData() {
 }
 
 function loadStatsChart() {
-    return $.ajax(API + 'pool/' + currentPool + '/stats/hourly')
+    return $.ajax(API + 'pools/' + currentPool + '/stats/hourly')
         .done(function (data) {
             labels = [];
             connectedMiners = [];
@@ -214,7 +214,7 @@ function loadStatsChart() {
 }
 
 function loadDashboardData(walletAddress) {
-    return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
+    return $.ajax(API + 'pools/' + currentPool + '/miner/' + walletAddress + '/stats')
         .done(function (data) {
             $('#unconfirmedShares').text(_formatter(data.result.pendingShares), 0, 'S');
             var workerHashRate = 0;
@@ -238,7 +238,7 @@ function loadDashboardData(walletAddress) {
 }
 
 function loadDashboardWorkerList(walletAddress) {
-    return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
+    return $.ajax(API + 'pools/' + currentPool + '/miner/' + walletAddress + '/stats')
         .done(function (data) {
             var workerList = '<thead><th>Name</th><th>Hash Rate</th><th>Share Rate</th></thead><tbody>';
             if (data.result.performance.length > 0) {
@@ -267,7 +267,7 @@ function loadDashboardWorkerList(walletAddress) {
 }
 
 function loadDashboardChart(walletAddress) {
-    return $.ajax(API + 'pool/' + currentPool + '/miner/' + walletAddress + '/stats')
+    return $.ajax(API + 'pools/' + currentPool + '/miner/' + walletAddress + '/stats')
         .done(function (data) {
             labels = [];
             minerHashRate = [];
@@ -345,7 +345,7 @@ function loadDashboardChart(walletAddress) {
 }
 
 function loadBlocksList() {
-    return $.ajax(API + 'pool/' + currentPool + '/blocks')
+    return $.ajax(API + 'pools/' + currentPool + '/blocks')
         .done(function (data) {
             var blockList = '<thead><th>Date &amp; Time</th><th>Height</th><th>Effort</th></th><th>Status</th><th colspan="2">Confirmation</th></thead><tbody>';
             if (data.length > 0) {
@@ -377,7 +377,7 @@ function loadBlocksList() {
 }
 
 function loadPaymentsList() {
-    return $.ajax(API + 'pool/' + currentPool + '/payments')
+    return $.ajax(API + 'pools/' + currentPool + '/payments')
         .done(function (data) {
             var paymentList = '<thead><th>Date &amp; Time</th><th>Address</th><th>Amount</th><th>Confirmation</th></thead><tbody>';
             if (data.length > 0) {
