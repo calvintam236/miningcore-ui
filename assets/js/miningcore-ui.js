@@ -37,6 +37,7 @@ function loadPools(renderCallback) {
         .done(function (data) {
             var poolList = '<ul class="dropdown-menu">';
             if (data.pools.length > 1) {
+                $('#currentPool').attr('data-toggle', 'dropdown');
                 $('#currentPool').append('<b class="caret"></b>');
             }
             $.each(data.pools, function (index, value) {
@@ -54,10 +55,12 @@ function loadPools(renderCallback) {
             if (poolList.length > 0) {
                 $('#poolList').append(poolList);
             }
-            $('#poolList li a').on('click', function (event) {
-                currentPool = $(event.target).attr('data-id');
-                loadPools(renderCallback);
-            });
+            if (data.pools.length > 1) {
+                $('#poolList li a').on('click', function (event) {
+                    currentPool = $(event.target).attr('data-id');
+                    loadPools(renderCallback);
+                });
+            }
             if (renderCallback.has()) {
                 renderCallback.fire();
             }
