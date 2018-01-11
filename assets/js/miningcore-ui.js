@@ -418,13 +418,13 @@ function loadConnectConfig() {
                 if (currentPool === value.id) {
                     connectPoolConfig += '<tr><td>Wallet Address</td><td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 8) + ' &hellip; ' + value.address.substring(value.address.length - 6) + '</a></td></tr>';
                     connectPoolConfig += '<tr><td>Payout Scheme</td><td>' + value.paymentProcessing.payoutScheme + '</td></tr>';
-                    connectPoolConfig += '<tr><td>Minimum Payment w/o #</td><td>' + value.paymentProcessing.minimumPayment + ' ' + value.coin.type + '</td></tr>';
+                    connectPoolConfig += '<tr><td>Minimum Payment w/o #</td><td>' + value.paymentProcessing.minimumPayment + '</td></tr>';
                     if (typeof(value.paymentProcessing.minimumPaymentToPaymentId) !== "undefined") {
-                        connectPoolConfig += '<tr><td>Minimum Payment w/ #</td><td>' + value.paymentProcessing.minimumPaymentToPaymentId + ' ' + value.coin.type + '</td></tr>';
+                        connectPoolConfig += '<tr><td>Minimum Payment w/ #</td><td>' + value.paymentProcessing.minimumPaymentToPaymentId + '</td></tr>';
                     }
                     connectPoolConfig += '<tr><td>Pool Fee</td><td>' + value.poolFeePercent + '%</td></tr>';
                     $.each(value.ports, function (port, options) {
-                        connectPoolConfig += '<tr><td>Port ' + port + ' Difficulty</td><td>'
+                        connectPoolConfig += '<tr><td>Port ' + port + ' Difficulty</td><td>';
                         if (typeof(options.varDiff) !== "undefined") {
                             connectPoolConfig += 'Variable / ' + options.varDiff.minDiff + ' &harr; ';
                             if (typeof(options.varDiff.maxDiff) === "undefined") {
