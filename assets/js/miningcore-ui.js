@@ -1,8 +1,7 @@
 // config
-var API = 'https://localhost:4000/api/';
-var defaultPool = ''; //ID
+var API = 'http://localhost:4000/api/'; // API address
+var defaultPool = ''; // Default Pool ID
 
-// current indicator + cache
 var currentPool = defaultPool;
 
 // private function
@@ -37,6 +36,7 @@ function loadPools(renderCallback) {
         .done(function (data) {
             var poolList = '<ul class="dropdown-menu">';
             if (data.pools.length > 1) {
+                $('#currentPool').attr('data-toggle', 'dropdown');
                 $('#currentPool').append('<b class="caret"></b>');
             }
             $.each(data.pools, function (index, value) {
@@ -54,10 +54,12 @@ function loadPools(renderCallback) {
             if (poolList.length > 0) {
                 $('#poolList').append(poolList);
             }
-            $('#poolList li a').on('click', function (event) {
-                currentPool = $(event.target).attr('data-id');
-                loadPools(renderCallback);
-            });
+            if (data.pools.length > 1) {
+                $('#poolList li a').on('click', function (event) {
+                    currentPool = $(event.target).attr('data-id');
+                    loadPools(renderCallback);
+                });
+            }
             if (renderCallback.has()) {
                 renderCallback.fire();
             }
@@ -99,45 +101,22 @@ function loadStatsData() {
 }
 
 function loadStatsChart() {
-    return $.ajax(API + 'pools/' + currentPool + '/stats/hourly')
+    return $.ajax(API + 'pools/' + currentPool + '/performance')
         .done(function (data) {
             labels = [];
             connectedMiners = [];
             networkHashRate = [];
             poolHashRate = [];
-            lowHashRate = 1e18;
-            maxHashRate = 0;
-            //lowMiners = 1e18;
-            //maxMiners = 0;
 
             $.each(data.stats, function (index, value) {
                 if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
-                    labels.push(new Date(value.created).toLocaleTimeString());
+                    labels.push(new Date(value.created).toISOString().slice(11, 16));
                 } else {
                     labels.push('');
                 }
-                /*
                 networkHashRate.push(value.networkHashRate);
-                if (value.networkHashRate < lowHashRate) {
-                    lowHashRate = value.poolHashRate;
-                } else if (value.networkHashRate > maxHashRate) {
-                    maxHashRate = value.poolHashRate;
-                }
-                */
                 poolHashRate.push(value.poolHashRate);
-                if (value.poolHashRate < lowHashRate) {
-                    lowHashRate = value.poolHashRate;
-                } else if (value.poolHashRate > maxHashRate) {
-                    maxHashRate = value.poolHashRate;
-                }
                 connectedMiners.push(value.connectedMiners);
-                /*
-                if (value.connectedMiners < lowMiners) {
-                    lowMiners = value.connectedMiners;
-                } else if (value.connectedMiners < maxMiners){
-                    maxMiners = value.connectedMiners;
-                }
-                */
             });
 
             var data = {
@@ -149,14 +128,13 @@ function loadStatsChart() {
             };
 
             var options = {
-                low: lowHashRate,
-                high: maxHashRate,
                 showArea: true,
                 height: "245px",
                 axisX: {
                     showGrid: false,
                 },
                 axisY: {
+                    offset: 47,
                     labelInterpolationFnc: function(value) {
                         return _formatter(value, 1, '');
                     }
@@ -164,8 +142,6 @@ function loadStatsChart() {
                 lineSmooth: Chartist.Interpolation.simple({
                     divisor: 2,
                 }),
-                showLine: true,
-                showPoint: false,
             };
 
             var responsiveOptions = [
@@ -188,18 +164,17 @@ function loadStatsChart() {
             };
 
             var options = {
-                //low: lowMiners,
-                //high: maxMiners,
-                seriesBarDistance: 10,
+                height: "245px",
                 axisX: {
                     showGrid: false,
                 },
-                height: "245px",
+                lineSmooth: Chartist.Interpolation.simple({
+                    divisor: 2,
+                }),
             };
 
             var responsiveOptions = [
                 ['screen and (max-width: 640px)', {
-                    seriesBarDistance: 5,
                     axisX: {
                         labelInterpolationFnc: function (value) {
                             return value[0];
@@ -222,17 +197,17 @@ function loadStatsChart() {
 }
 
 function loadDashboardData(walletAddress) {
-    return $.ajax(API + 'pools/' + currentPool + '/miner/' + walletAddress + '/stats')
+    return $.ajax(API + 'pools/' + currentPool + '/miners/' + walletAddress)
         .done(function (data) {
-            $('#pendingShares').text(_formatter(data.result.pendingShares), 0, 'S');
+            $('#pendingShares').text(_formatter(data.pendingShares, 0, 'S'));
             var workerHashRate = 0;
-            $.each(data.result.performance.workers, function (index, value) {
-                workerHashRate += value.hashrate;
+            $.each(data.performance.workers, function (index, value) {
+                workerHashRate += value.hashRate;
             });
             $('#minerHashRate').text(_formatter(workerHashRate, 5, 'H/s'));
-            $('#pendingBalance').text(_formatter(data.result.pendingBalance), 5, '');
-            $('#paidBalance').text(_formatter(data.result.totalPaid), 5, '');
-            $('#lifetimeBalance').text(_formatter(data.result.pendingBalance + data.result.totalPaid), 5, '');
+            $('#pendingBalance').text(_formatter(data.pendingBalance, 5, ''));
+            $('#paidBalance').text(_formatter(data.totalPaid, 5, ''));
+            $('#lifetimeBalance').text(_formatter(data.pendingBalance + data.totalPaid, 5, ''));
         })
         .fail(function () {
             $.notify({
@@ -246,16 +221,20 @@ function loadDashboardData(walletAddress) {
 }
 
 function loadDashboardWorkerList(walletAddress) {
-    return $.ajax(API + 'pools/' + currentPool + '/miner/' + walletAddress + '/stats')
+    return $.ajax(API + 'pools/' + currentPool + '/miners/' + walletAddress + '/performance')
         .done(function (data) {
             var workerList = '<thead><th>Name</th><th>Hash Rate</th><th>Share Rate</th></thead><tbody>';
             if (data.performance.workers != null) {
                 $.each(data.performance.workers, function (index, value) {
                     workerList += '<tr>';
-                    workerList += '<td>' + index + '</td>';
-                    workerList += '<td>' + _formatter(value.hashrate, 5, 'H/s') + '</td>';
+                    if (index.length === 0) {
+                        workerList += '<td>Unnamed</td>';
+                    } else {
+                        workerList += '<td>' + index + '</td>';
+                    }
+                    workerList += '<td>' + _formatter(value.hashRate, 5, 'H/s') + '</td>';
                     workerList += '<td>' + _formatter(value.sharesPerSecond, 5, 'S/s') + '</td>';
-                    workerList += '</tr>'
+                    workerList += '</tr>';
                 });
             } else {
                 workerList += '<tr><td colspan="3">None</td></tr>';
@@ -275,47 +254,38 @@ function loadDashboardWorkerList(walletAddress) {
 }
 
 function loadDashboardChart(walletAddress) {
-    return $.ajax(API + 'pools/' + currentPool + '/miner/' + walletAddress + '/stats')
+    return $.ajax(API + 'pools/' + currentPool + '/miners/' + walletAddress + '/performance')
         .done(function (data) {
             labels = [];
             minerHashRate = [];
-            lowHashRate = 1e18;
-            maxHashRate = 0;
-            $.each(data.result.performance, function (index, value) {
+            $.each(data, function (index, value) {
                 if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
-                    labels.push(new Date(value.created).toLocaleTimeString());
+                    labels.push(new Date(value.created).toISOString().slice(11, 16));
                 } else {
                     labels.push('');
                 }
                 var workerHashRate = 0;
                 $.each(value.workers, function (index2, value2) {
-                    workerHashRate += value2.hashrate;
+                    workerHashRate += value2.hashRate;
                 });
                 minerHashRate.push(workerHashRate);
-                if (workerHashRate < lowHashRate) {
-                    lowHashRate = value.minerHashRate;
-                } else if (workerHashRate > maxHashRate) {
-                    maxHashRate = value.minerHashRate;
-                }
             });
 
             var data = {
                 labels: labels,
                 series: [
-                    poolHashRate,
                     minerHashRate,
                 ],
             };
 
             var options = {
-                low: lowHashRate,
-                high: maxHashRate,
                 showArea: true,
                 height: "245px",
                 axisX: {
                     showGrid: false,
                 },
                 axisY: {
+                    offset: 47,
                     labelInterpolationFnc: function(value) {
                         return _formatter(value, 1, '');
                     }
@@ -323,8 +293,6 @@ function loadDashboardChart(walletAddress) {
                 lineSmooth: Chartist.Interpolation.simple({
                     divisor: 2,
                 }),
-                showLine: true,
-                showPoint: false,
             };
 
             var responsiveOptions = [
@@ -343,6 +311,35 @@ function loadDashboardChart(walletAddress) {
             $.notify({
                 icon: "ti-cloud-down",
                 message: "Error: No response from API.<br>(loadDashboardChart)",
+            }, {
+                type: 'danger',
+                timer: 3000,
+            });
+        });
+}
+
+function loadMinersList() {
+    return $.ajax(API + 'pools/' + currentPool + '/miners')
+        .done(function (data) {
+            var minerList = '<thead><th>Address</th><th>Hash Rate</th><th>Share Rate</th></thead><tbody>';
+            if (data.length > 0) {
+                $.each(data, function (index, value) {
+                    minerList += '<tr>';
+                    minerList += '<td><a href="' + value.minerAddressInfoLink + '" target="_blank">' + value.miner.substring(0, 8) + ' &hellip; ' + value.miner.substring(value.miner.length - 6) + '</td>';
+                    minerList += '<td>' + _formatter(value.hashRate, 5, 'H/s') + '</td>';
+                    minerList += '<td>' + _formatter(value.sharesPerSecond, 5, 'S/s') + '</td>';
+                    minerList += '</tr>';
+                });
+            } else {
+                minerList += '<tr><td colspan="2">None</td></tr>';
+            }
+            minerList += '</tbody>';
+            $('#minerList').html(minerList);
+        })
+        .fail(function () {
+            $.notify({
+                icon: "ti-cloud-down",
+                message: "Error: No response from API.<br>(loadMinersList)",
             }, {
                 type: 'danger',
                 timer: 3000,

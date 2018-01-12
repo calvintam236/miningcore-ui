@@ -48,19 +48,19 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-<!--                <li>
+                <li class="active">
                     <a href="miners.html">
                         <i class="ti-user"></i>
                         <p>Miners</p>
                     </a>
-                </li>-->
+                </li>
                 <li>
                     <a href="blocks.html">
                         <i class="ti-layers"></i>
                         <p>Blocks</p>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="payments.html">
                         <i class="ti-wallet"></i>
                         <p>Payments</p>
@@ -72,12 +72,12 @@
                         <p>Connect</p>
                     </a>
                 </li>
-<!--                <li>
+                <li>
                     <a href="alerts.html">
                         <i class="ti-bell"></i>
                         <p>Alerts</p>
                     </a>
-                </li>-->
+                </li>
             </ul>
         </div>
     </div>
@@ -92,7 +92,7 @@
                         <span class="icon-bar bar2"></span>
                         <span class="icon-bar bar3"></span>
                     </button>
-                    <a class="navbar-brand" href="payments.html">Payments</a>
+                    <a class="navbar-brand" href="miners.html">Miners</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -119,11 +119,11 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Payments Rewarded</h4>
-                                <p class="category">Last 500 payments</p>
+                                <h4 class="title">Best Miners</h4>
+                                <p class="category">Top 20 contributors</p>
                             </div>
                             <div class="content table-responsive table-full-width">
-                                <table id="paymentList" class="table table-striped"></table>
+                                <table id="minerList" class="table table-striped"></table>
                             </div>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
     $(document).ready(function () {
         var renderCallback = $.Callbacks();
         renderCallback.add(function () {
-            loadPaymentsList();
+            loadMinersList();
         });
         loadPools(renderCallback);
     });
