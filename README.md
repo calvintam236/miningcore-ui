@@ -1,7 +1,7 @@
 # miningcore-ui
-UI designed for [MiningCore](https://github.com/coinfoundry/miningcore)
+UI designed for [Miningcore](https://github.com/coinfoundry/miningcore)
 
-** Note: This is alpha release, so you will need to change the coding to remove the hardcoded data. **
+** Note: This is beta release, so you will need to test it on your server. **
 
 ## Setup
 
@@ -27,3 +27,5 @@ ETC: `0xFaBA3be3b3De5469C3F6C6185150928F3773C7b4`
 ZEC: `t1Z5Kc75JQ17txyaDUfwwyabTgsJMfuuSp4`
 
 ZEN: `znh1Wba6kRUQ9TLFWP4SHyKXdsHVdt2fqSw`
+
+ETN: `etnk58m3iUDNkciPQcjQ7S9oUVyZKHaScfYxb4gx2bvdYP9Uu1uFyVoFJxSWHD8gkwYobpuDfYaHCDryWWV91dWM8TpGTgo74V`
