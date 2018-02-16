@@ -19,6 +19,8 @@ function _formatter(value, decimal, unit) {
             { value: 1e12, symbol: "T" },
             { value: 1e15, symbol: "P" },
             { value: 1e18, symbol: "E" },
+            { value: 1e21, symbol: "Z" },
+            { value: 1e24, symbol: "Y" },
         ];
         for (var i = si.length - 1; i > 0; i--) {
             if (value >= si[i].value) {
