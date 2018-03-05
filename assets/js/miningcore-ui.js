@@ -85,8 +85,8 @@ function loadStatsData() {
                     //$('#poolShares').text(_formatter(value, 0, ''));
                     //$('#poolBlocks').text(_formatter(value, 0, ''));
                     $('#poolMiners').text(_formatter(value.poolStats.connectedMiners, 0, ''));
-                    $('#poolHashRate').text(_formatter(value.poolStats.poolHashRate, 5, 'H/s'));
-                    $('#networkHashRate').text(_formatter(value.networkStats.networkHashRate, 5, 'H/s'));
+                    $('#poolHashRate').text(_formatter(value.poolStats.poolHashrate, 5, 'H/s'));
+                    $('#networkHashRate').text(_formatter(value.networkStats.networkHashrate, 5, 'H/s'));
                     $('#networkDifficulty').text(_formatter(value.networkStats.networkDifficulty, 5, ''));
                 }
             });
@@ -116,8 +116,8 @@ function loadStatsChart() {
                 } else {
                     labels.push('');
                 }
-                networkHashRate.push(value.networkHashRate);
-                poolHashRate.push(value.poolHashRate);
+                networkHashRate.push(value.networkHashrate);
+                poolHashRate.push(value.poolHashrate);
                 connectedMiners.push(value.connectedMiners);
             });
 
@@ -204,7 +204,7 @@ function loadDashboardData(walletAddress) {
             $('#pendingShares').text(_formatter(data.pendingShares, 0, 'S'));
             var workerHashRate = 0;
             $.each(data.performance.workers, function (index, value) {
-                workerHashRate += value.hashRate;
+                workerHashRate += value.hashrate;
             });
             $('#minerHashRate').text(_formatter(workerHashRate, 5, 'H/s'));
             $('#pendingBalance').text(_formatter(data.pendingBalance, 5, ''));
@@ -234,7 +234,7 @@ function loadDashboardWorkerList(walletAddress) {
                     } else {
                         workerList += '<td>' + index + '</td>';
                     }
-                    workerList += '<td>' + _formatter(value.hashRate, 5, 'H/s') + '</td>';
+                    workerList += '<td>' + _formatter(value.hashrate, 5, 'H/s') + '</td>';
                     workerList += '<td>' + _formatter(value.sharesPerSecond, 5, 'S/s') + '</td>';
                     workerList += '</tr>';
                 });
@@ -269,7 +269,7 @@ function loadDashboardChart(walletAddress) {
                 }
                 var workerHashRate = 0;
                 $.each(value.workers, function (index2, value2) {
-                    workerHashRate += value2.hashRate;
+                    workerHashRate += value2.hashrate;
                 });
                 minerHashRate.push(workerHashRate);
             });
