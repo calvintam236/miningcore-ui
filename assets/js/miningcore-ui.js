@@ -204,7 +204,7 @@ function loadDashboardData(walletAddress) {
             $('#pendingShares').text(_formatter(data.pendingShares, 0, 'S'));
             var workerHashRate = 0;
             $.each(data.performance.workers, function (index, value) {
-                workerHashRate += value.hashRate;
+                workerHashRate += value.hashrate;
             });
             $('#minerHashRate').text(_formatter(workerHashRate, 5, 'H/s'));
             $('#pendingBalance').text(_formatter(data.pendingBalance, 5, ''));
