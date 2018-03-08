@@ -351,7 +351,7 @@ function loadMinersList() {
 }
 
 function loadBlocksList() {
-    return $.ajax(API + 'pools/' + currentPool + '/blocks')
+    return $.ajax(API + 'pools/' + currentPool + '/blocks?pageSize=100')
         .done(function (data) {
             var blockList = '<thead><th>Date &amp; Time</th><th>Height</th><th>Effort</th></th><th>Status</th><th colspan="2">Confirmation</th></thead><tbody>';
             if (data.length > 0) {
@@ -383,7 +383,7 @@ function loadBlocksList() {
 }
 
 function loadPaymentsList() {
-    return $.ajax(API + 'pools/' + currentPool + '/payments')
+    return $.ajax(API + 'pools/' + currentPool + '/payments?pageSize=500')
         .done(function (data) {
             var paymentList = '<thead><th>Date &amp; Time</th><th>Address</th><th>Amount</th><th>Confirmation</th></thead><tbody>';
             if (data.length > 0) {
