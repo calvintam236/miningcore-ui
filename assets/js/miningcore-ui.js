@@ -10,8 +10,6 @@ function _formatter(value, decimal, unit) {
         return '0 ' + unit;
     } else {
         var si = [
-            { value: 1e-6, symbol: "μ" },
-            { value: 1e-3, symbol: "m" },
             { value: 1, symbol: "" },
             { value: 1e3, symbol: "k" },
             { value: 1e6, symbol: "M" },
@@ -324,11 +322,11 @@ function loadDashboardChart(walletAddress) {
 function loadMinersList() {
     return $.ajax(API + 'pools/' + currentPool + '/miners')
         .done(function (data) {
-            var minerList = '<thead><th>Address</th><th>Hash Rate</th><th>Share Rate</th></thead><tbody>';
+            var minerList = '<thead><tr><th>Address</th><th>Hash Rate</th><th>Share Rate</th></tr></thead><tbody>';
             if (data.length > 0) {
                 $.each(data, function (index, value) {
                     minerList += '<tr>';
-                    minerList += '<td><a href="' + value.minerAddressInfoLink + '" target="_blank">' + value.miner.substring(0, 8) + ' &hellip; ' + value.miner.substring(value.miner.length - 6) + '</td>';
+                    minerList += '<td><a href="' + value.minerAddressInfoLink + '" target="_blank">' + value.miner.substring(0, 12) + ' &hellip; ' + value.miner.substring(value.miner.length - 12) + '</td>';
                     minerList += '<td>' + _formatter(value.hashRate, 5, 'H/s') + '</td>';
                     minerList += '<td>' + _formatter(value.sharesPerSecond, 5, 'S/s') + '</td>';
                     minerList += '</tr>';
@@ -353,16 +351,18 @@ function loadMinersList() {
 function loadBlocksList() {
     return $.ajax(API + 'pools/' + currentPool + '/blocks?pageSize=100')
         .done(function (data) {
-            var blockList = '<thead><th>Date &amp; Time</th><th>Height</th><th>Effort</th></th><th>Status</th><th colspan="2">Confirmation</th></thead><tbody>';
+            var blockList = '<thead><tr><th rowspan="2">Date &amp; Time</th><th>Height</th><th>Effort</th><th>Status</th><th>Reward</th></tr><tr><th style="display: none"></th><th colspan="4">Confirmation</th></tr></thead><tbody>';
             if (data.length > 0) {
                 $.each(data, function (index, value) {
                     blockList += '<tr>';
-                    blockList += '<td>' + new Date(value.created).toLocaleString() + '</td>';
+                    blockList += '<td rowspan="2">' + new Date(value.created).toLocaleString() + '</td>';
                     blockList += '<td>' + value.blockHeight + '</td>';
                     blockList += '<td>~' + Math.round(value.effort * 100) + '%</td>';
                     blockList += '<td>' + value.status + '</td>';
+                    blockList += '<td>' + _formatter(value.reward, 5, '') + '</td>';
+                    blockList += '</tr><tr><td style="display: none"></td>';
                     blockList += '<td>~' + Math.round(value.confirmationProgress * 100) + '%</td>';
-                    blockList += '<td><a href="' + value.infoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 10) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 8) + ' </a></td>';
+                    blockList += '<td colspan="3"><a href="' + value.infoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 16) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 16) + ' </a></td>';
                     blockList += '</tr>'
                 });
             } else {
@@ -385,14 +385,15 @@ function loadBlocksList() {
 function loadPaymentsList() {
     return $.ajax(API + 'pools/' + currentPool + '/payments?pageSize=500')
         .done(function (data) {
-            var paymentList = '<thead><th>Date &amp; Time</th><th>Address</th><th>Amount</th><th>Confirmation</th></thead><tbody>';
+            var paymentList = '<thead><tr><th rowspan="2">Date &amp; Time</th><th>Address</th><th>Amount</th></tr><tr><th style="display: none"></th><th colspan="2">Confirmation</th></tr></thead><tbody>';
             if (data.length > 0) {
                 $.each(data, function (index, value) {
                     paymentList += '<tr>';
-                    paymentList += '<td>' + new Date(value.created).toLocaleString() + '</td>';
-                    paymentList += '<td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 8) + ' &hellip; ' + value.address.substring(value.address.length - 6) + '</td>';
-                    paymentList += '<td>' + value.amount + '</td>';
-                    paymentList += '<td><a href="' + value.transactionInfoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 10) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 8) + ' </a></td>';
+                    paymentList += '<td rowspan="2">' + new Date(value.created).toLocaleString() + '</td>';
+                    paymentList += '<td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 12) + ' &hellip; ' + value.address.substring(value.address.length - 12) + '</td>';
+                    paymentList += '<td>' + _formatter(value.amount, 5, '') + '</td>';
+                    paymentList += '</tr><tr><td style="display: none"></td>';
+                    paymentList += '<td colspan="2"><a href="' + value.transactionInfoLink + '" target="_blank">' + value.transactionConfirmationData.substring(0, 16) + ' &hellip; ' + value.transactionConfirmationData.substring(value.transactionConfirmationData.length - 16) + ' </a></td>';
                     paymentList += '</tr>';
                 });
             } else {
@@ -418,7 +419,7 @@ function loadConnectConfig() {
             var connectPoolConfig = '<thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>';
             $.each(data.pools, function (index, value) {
                 if (currentPool === value.id) {
-                    connectPoolConfig += '<tr><td>Wallet Address</td><td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 8) + ' &hellip; ' + value.address.substring(value.address.length - 6) + '</a></td></tr>';
+                    connectPoolConfig += '<tr><td>Wallet Address</td><td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 12) + ' &hellip; ' + value.address.substring(value.address.length - 12) + '</a></td></tr>';
                     connectPoolConfig += '<tr><td>Payout Scheme</td><td>' + value.paymentProcessing.payoutScheme + '</td></tr>';
                     connectPoolConfig += '<tr><td>Minimum Payment w/o #</td><td>' + value.paymentProcessing.minimumPayment + '</td></tr>';
                     if (typeof(value.paymentProcessing.minimumPaymentToPaymentId) !== "undefined") {
