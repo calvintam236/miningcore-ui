@@ -332,7 +332,7 @@ function loadMinersList() {
                     minerList += '</tr>';
                 });
             } else {
-                minerList += '<tr><td colspan="2">None</td></tr>';
+                minerList += '<tr><td colspan="3">None</td></tr>';
             }
             minerList += '</tbody>';
             $('#minerList').html(minerList);
@@ -366,7 +366,7 @@ function loadBlocksList() {
                     blockList += '</tr>'
                 });
             } else {
-                blockList += '<tr><td colspan="4">None</td></tr>';
+                blockList += '<tr><td colspan="5">None</td></tr>';
             }
             blockList += '</tbody>';
             $('#blockList').html(blockList);
@@ -397,7 +397,7 @@ function loadPaymentsList() {
                     paymentList += '</tr>';
                 });
             } else {
-                paymentList += '<tr><td colspan="4">None</td></tr>';
+                paymentList += '<tr><td colspan="3">None</td></tr>';
             }
             paymentList += '</tbody>';
             $('#paymentList').html(paymentList);
