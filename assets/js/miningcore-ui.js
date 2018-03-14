@@ -107,7 +107,6 @@ function loadStatsChart() {
             connectedMiners = [];
             networkHashRate = [];
             poolHashRate = [];
-
             $.each(data.stats, function (index, value) {
                 if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
                     labels.push(new Date(value.created).toISOString().slice(11, 16));
@@ -118,7 +117,6 @@ function loadStatsChart() {
                 poolHashRate.push(value.poolHashrate);
                 connectedMiners.push(value.connectedMiners);
             });
-
             var data = {
                 labels: labels,
                 series: [
@@ -126,7 +124,6 @@ function loadStatsChart() {
                     poolHashRate,
                 ],
             };
-
             var options = {
                 showArea: true,
                 height: "245px",
@@ -143,7 +140,6 @@ function loadStatsChart() {
                     divisor: 2,
                 }),
             };
-
             var responsiveOptions = [
                 ['screen and (max-width: 640px)', {
                     axisX: {
@@ -153,16 +149,13 @@ function loadStatsChart() {
                     },
                 }],
             ];
-
             Chartist.Line('#chartStatsHashRate', data, options, responsiveOptions);
-
             var data = {
                 labels: labels,
                 series: [
                     connectedMiners,
                 ],
             };
-
             var options = {
                 height: "245px",
                 axisX: {
@@ -172,7 +165,6 @@ function loadStatsChart() {
                     divisor: 2,
                 }),
             };
-
             var responsiveOptions = [
                 ['screen and (max-width: 640px)', {
                     axisX: {
@@ -182,7 +174,6 @@ function loadStatsChart() {
                     },
                 }],
             ];
-
             Chartist.Line('#chartStatsMiners', data, options, responsiveOptions);
         })
         .fail(function () {
@@ -258,7 +249,6 @@ function loadDashboardChart(walletAddress) {
         .done(function (data) {
             labels = [];
             minerHashRate = [];
-
             $.each(data, function (index, value) {
                 if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
                     labels.push(new Date(value.created).toISOString().slice(11, 16));
@@ -271,14 +261,12 @@ function loadDashboardChart(walletAddress) {
                 });
                 minerHashRate.push(workerHashRate);
             });
-
             var data = {
                 labels: labels,
                 series: [
                     minerHashRate,
                 ],
             };
-
             var options = {
                 showArea: true,
                 height: "245px",
@@ -295,7 +283,6 @@ function loadDashboardChart(walletAddress) {
                     divisor: 2,
                 }),
             };
-
             var responsiveOptions = [
                 ['screen and (max-width: 640px)', {
                     axisX: {
@@ -305,7 +292,6 @@ function loadDashboardChart(walletAddress) {
                     },
                 }],
             ];
-
             Chartist.Line('#chartDashboardHashRate', data, options, responsiveOptions);
         })
         .fail(function () {
