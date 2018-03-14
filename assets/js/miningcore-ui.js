@@ -190,7 +190,7 @@ function loadStatsChart() {
 function loadDashboardData(walletAddress) {
     return $.ajax(API + 'pools/' + currentPool + '/miners/' + walletAddress)
         .done(function (data) {
-            $('#pendingShares').text(_formatter(data.pendingShares, 0, 'S'));
+            $('#pendingShares').text(_formatter(data.pendingShares, 0, ''));
             var workerHashRate = 0;
             $.each(data.performance.workers, function (index, value) {
                 workerHashRate += value.hashrate;
@@ -247,52 +247,54 @@ function loadDashboardWorkerList(walletAddress) {
 function loadDashboardChart(walletAddress) {
     return $.ajax(API + 'pools/' + currentPool + '/miners/' + walletAddress + '/performance')
         .done(function (data) {
-            labels = [];
-            minerHashRate = [];
-            $.each(data, function (index, value) {
-                if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
-                    labels.push(new Date(value.created).toISOString().slice(11, 16));
-                } else {
-                    labels.push('');
-                }
-                var workerHashRate = 0;
-                $.each(value.workers, function (index2, value2) {
-                    workerHashRate += value2.hashrate;
-                });
-                minerHashRate.push(workerHashRate);
-            });
-            var data = {
-                labels: labels,
-                series: [
-                    minerHashRate,
-                ],
-            };
-            var options = {
-                showArea: true,
-                height: "245px",
-                axisX: {
-                    showGrid: false,
-                },
-                axisY: {
-                    offset: 47,
-                    labelInterpolationFnc: function(value) {
-                        return _formatter(value, 1, '');
+            if (data.length > 0) {
+                labels = [];
+                minerHashRate = [];
+                $.each(data, function (index, value) {
+                    if (labels.length === 0 || (labels.length + 1) % 4 === 1) {
+                        labels.push(new Date(value.created).toISOString().slice(11, 16));
+                    } else {
+                        labels.push('');
                     }
-                },
-                lineSmooth: Chartist.Interpolation.simple({
-                    divisor: 2,
-                }),
-            };
-            var responsiveOptions = [
-                ['screen and (max-width: 640px)', {
+                    var workerHashRate = 0;
+                    $.each(value.workers, function (index2, value2) {
+                        workerHashRate += value2.hashrate;
+                    });
+                    minerHashRate.push(workerHashRate);
+                });
+                var data = {
+                    labels: labels,
+                    series: [
+                        minerHashRate,
+                    ],
+                };
+                var options = {
+                    showArea: true,
+                    height: "245px",
                     axisX: {
-                        labelInterpolationFnc: function (value) {
-                            return value[0];
+                        showGrid: false,
+                    },
+                    axisY: {
+                        offset: 47,
+                        labelInterpolationFnc: function(value) {
+                            return _formatter(value, 1, '');
                         }
                     },
-                }],
-            ];
-            Chartist.Line('#chartDashboardHashRate', data, options, responsiveOptions);
+                    lineSmooth: Chartist.Interpolation.simple({
+                        divisor: 2,
+                    }),
+                };
+                var responsiveOptions = [
+                    ['screen and (max-width: 640px)', {
+                        axisX: {
+                            labelInterpolationFnc: function (value) {
+                                return value[0];
+                            }
+                        },
+                    }],
+                ];
+                Chartist.Line('#chartDashboardHashRate', data, options, responsiveOptions);
+            }
         })
         .fail(function () {
             $.notify({
