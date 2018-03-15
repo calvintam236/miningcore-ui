@@ -345,7 +345,11 @@ function loadBlocksList() {
                     blockList += '<tr>';
                     blockList += '<td rowspan="2">' + new Date(value.created).toLocaleString() + '</td>';
                     blockList += '<td>' + value.blockHeight + '</td>';
-                    blockList += '<td>~' + Math.round(value.effort * 100) + '%</td>';
+                    if (typeof(value.effort) !== "undefined") {
+                        blockList += '<td>~' + Math.round(value.effort * 100) + '%</td>';
+                    } else {
+                        blockList += '<td>n/a</td>';
+                    }
                     blockList += '<td>' + value.status + '</td>';
                     blockList += '<td>' + _formatter(value.reward, 5, '') + '</td>';
                     blockList += '</tr><tr><td style="display: none"></td>';
