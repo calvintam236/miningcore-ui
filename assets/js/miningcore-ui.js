@@ -314,7 +314,8 @@ function loadMinersList() {
             if (data.length > 0) {
                 $.each(data, function (index, value) {
                     minerList += '<tr>';
-                    minerList += '<td><a href="' + value.minerAddressInfoLink + '" target="_blank">' + value.miner.substring(0, 12) + ' &hellip; ' + value.miner.substring(value.miner.length - 12) + '</td>';
+                    minerList += '<td>' + value.miner.substring(0, 12) + ' &hellip; ' + value.miner.substring(value.miner.length - 12) + '</td>';
+                    //minerList += '<td><a href="' + value.minerAddressInfoLink + '" target="_blank">' + value.miner.substring(0, 12) + ' &hellip; ' + value.miner.substring(value.miner.length - 12) + '</td>';
                     minerList += '<td>' + _formatter(value.hashrate, 5, 'H/s') + '</td>';
                     minerList += '<td>' + _formatter(value.sharesPerSecond, 5, 'S/s') + '</td>';
                     minerList += '</tr>';
